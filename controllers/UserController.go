@@ -180,6 +180,6 @@ func UserUpdateByAd(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "ad has successfully updated",
+		"message": "ad successfully updated",
 	})
 }
