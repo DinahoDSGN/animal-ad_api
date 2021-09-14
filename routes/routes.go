@@ -9,20 +9,26 @@ func Setup(app *fiber.App) {
 
 	app.Post("/api/register", controllers.Register)
 
+	api := app.Group("/api")
+
+	user := api.Group("/user")
+	ad := api.Group("/ad")
+	spec := api.Group("/spec")
+
 	// USER READ
-	app.Get("api/user/get", controllers.UserGetAll)
-	app.Get("api/user/get/username=:username", controllers.UserGetByUsername)
+	user.Get("/get", controllers.UserGetAll)
+	user.Get("/get/username=:username", controllers.UserGetByUsername)
 	// USER DELETE
-	app.Delete("api/user/username=:username", controllers.UserDeleteByUsername)
+	user.Delete("/username=:username", controllers.UserDeleteByUsername)
 	// USER UPDATE/PUT
-	app.Put("/api/user/name/username=:username", controllers.UserUpdateByName)
-	app.Put("/api/user/lastname/username=:username", controllers.UserUpdateByLastname)
-	app.Put("/api/user/username/username=:username", controllers.UserUpdateByUsername)
-	app.Put("/api/user/email/username=:username", controllers.UserUpdateByEmail)
-	app.Put("/api/user/ad/username=:username", controllers.UserUpdateByAd)
+	user.Put("/name/username=:username", controllers.UserUpdateByName)
+	user.Put("/lastname/username=:username", controllers.UserUpdateByLastname)
+	user.Put("/username/username=:username", controllers.UserUpdateByUsername)
+	user.Put("/email/username=:username", controllers.UserUpdateByEmail)
+	user.Put("/ad/username=:username", controllers.UserUpdateByAd)
 
-	app.Post("/api/ad/create", controllers.CreateAd)
+	ad.Post("/create", controllers.CreateAd)
 
-	app.Post("/api/spec/create", controllers.CreateSpecify)
+	spec.Post("/create", controllers.CreateSpecify)
 
 }
