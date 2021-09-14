@@ -88,3 +88,43 @@ func AdDeleteByTitle(c *fiber.Ctx) error {
 		"message": "ad successfully deleted",
 	})
 }
+
+func AdUpdate(c *fiber.Ctx) error {
+	var data map[string]string
+	paramTitle := c.Params("title")
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	specifyId, _ := strconv.Atoi(data["specify_id"])
+	authorId, _ := strconv.Atoi(data["author_id"])
+
+	ad := models.Ad{
+		Title:       data["title"],
+		Location:    data["location"],
+		Description: data["description"],
+		SpecifyId:   uint(specifyId),
+		UserId:      uint(authorId),
+	}
+
+	database.DB.Model(&ad).Where("title = ?", paramTitle).Updates(&ad)
+
+	database.DB.Save(&ad)
+
+	database.DB.Raw("SELECT * FROM ads WHERE title = ?", paramTitle).Find(&ad)
+
+	if ad.Id == 0 {
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "cannot find ad by title",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  fiber.StatusOK,
+		"message": "title successfully updated",
+		"data":    ad,
+	})
+
+}

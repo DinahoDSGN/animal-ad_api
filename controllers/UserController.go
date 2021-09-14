@@ -18,13 +18,14 @@ func UserGetAll(c *fiber.Ctx) error {
 }
 
 func UserGetByUsername(c *fiber.Ctx) error {
-	paramUsername := c.Params("username")
 	var data models.User
+	paramUsername := c.Params("username")
 	database.DB.Raw("SELECT * FROM users WHERE username = ?", paramUsername).Find(&data)
 
 	if data.Id == 0 {
 		return c.JSON(fiber.Map{
-			"status": fiber.StatusBadRequest,
+			"status":  fiber.StatusBadRequest,
+			"message": "user does not exist",
 		})
 	}
 
@@ -55,131 +56,7 @@ func UserDeleteByUsername(c *fiber.Ctx) error {
 	})
 }
 
-func UserUpdateByName(c *fiber.Ctx) error {
-	var data map[string]string
-	paramUsername := c.Params("username")
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
-	user := models.User{
-		Name: data["name"],
-	}
-
-	database.DB.Model(user).Where(
-		"username = ?", paramUsername,
-	).
-		Updates(map[string]interface{}{
-			"name": user.Name,
-		}).Find(&user)
-
-	if user.Id == 0 {
-		return c.JSON(fiber.Map{
-			"status":  fiber.StatusBadRequest,
-			"message": "cannot find user",
-		})
-	}
-
-	return c.JSON(fiber.Map{
-		"message": "name successfully updated",
-	})
-}
-
-func UserUpdateByLastname(c *fiber.Ctx) error {
-	var data map[string]string
-	paramUsername := c.Params("username")
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
-	user := models.User{
-		Lastname: data["lastname"],
-	}
-
-	database.DB.Model(user).Where(
-		"username = ?", paramUsername,
-	).
-		Updates(map[string]interface{}{
-			"lastname": user.Lastname,
-		}).Find(&user)
-
-	if user.Id == 0 {
-		return c.JSON(fiber.Map{
-			"status":  fiber.StatusBadRequest,
-			"message": "cannot find user",
-		})
-	}
-
-	return c.JSON(fiber.Map{
-		"message": "lastname successfully updated",
-	})
-}
-
-func UserUpdateByUsername(c *fiber.Ctx) error {
-	var data map[string]string
-	paramUsername := c.Params("username")
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
-	user := models.User{
-		Username: data["username"],
-	}
-
-	database.DB.Model(user).Where(
-		"username = ?", paramUsername,
-	).
-		Updates(map[string]interface{}{
-			"username": user.Username,
-		}).Find(&user)
-
-	if user.Id == 0 {
-		return c.JSON(fiber.Map{
-			"status":  fiber.StatusBadRequest,
-			"message": "cannot find user",
-		})
-	}
-
-	return c.JSON(fiber.Map{
-		"message": "username successfully updated",
-	})
-}
-
-func UserUpdateByEmail(c *fiber.Ctx) error {
-	var data map[string]string
-	paramUsername := c.Params("username")
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
-	user := models.User{
-		Email: data["email"],
-	}
-
-	database.DB.Model(user).Where(
-		"username = ?", paramUsername,
-	).
-		Updates(map[string]interface{}{
-			"email": user.Email,
-		}).Find(&user)
-
-	if user.Id == 0 {
-		return c.JSON(fiber.Map{
-			"status":  fiber.StatusBadRequest,
-			"message": "cannot find user",
-		})
-	}
-
-	return c.JSON(fiber.Map{
-		"message": "email successfully updated",
-	})
-}
-
-func UserUpdateByAd(c *fiber.Ctx) error {
+func UserUpdate(c *fiber.Ctx) error {
 	var data map[string]string
 	paramUsername := c.Params("username")
 
@@ -190,24 +67,30 @@ func UserUpdateByAd(c *fiber.Ctx) error {
 	adId, _ := strconv.Atoi(data["ad_id"])
 
 	user := models.User{
-		AdId: uint(adId),
+		Name:     data["name"],
+		Lastname: data["lastname"],
+		Username: data["username"],
+		Email:    data["email"],
+		AdId:     uint(adId),
 	}
 
-	database.DB.Model(user).Where(
-		"username = ?", paramUsername,
-	).
-		Updates(map[string]interface{}{
-			"ad_id": user.AdId,
-		}).Find(&user)
+	database.DB.Model(&user).Where("username = ?", paramUsername).Updates(&user)
+
+	database.DB.Save(&user)
+
+	database.DB.Raw("SELECT * FROM users WHERE username = ?", paramUsername).Find(&user)
 
 	if user.Id == 0 {
 		return c.JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
-			"message": "cannot find ad",
+			"message": "cannot find user by username",
 		})
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "ad successfully updated",
+		"status":  fiber.StatusOK,
+		"message": "user successfully updated",
+		"data":    user,
 	})
+
 }
