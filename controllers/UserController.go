@@ -67,12 +67,19 @@ func UserUpdateByName(c *fiber.Ctx) error {
 		Name: data["name"],
 	}
 
-	database.DB.Model(&models.User{}).Where(
+	database.DB.Model(user).Where(
 		"username = ?", paramUsername,
 	).
 		Updates(map[string]interface{}{
 			"name": user.Name,
+		}).Find(&user)
+
+	if user.Id == 0 {
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "cannot find user",
 		})
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "name successfully updated",
@@ -91,12 +98,19 @@ func UserUpdateByLastname(c *fiber.Ctx) error {
 		Lastname: data["lastname"],
 	}
 
-	database.DB.Model(&models.User{}).Where(
+	database.DB.Model(user).Where(
 		"username = ?", paramUsername,
 	).
 		Updates(map[string]interface{}{
 			"lastname": user.Lastname,
+		}).Find(&user)
+
+	if user.Id == 0 {
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "cannot find user",
 		})
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "lastname successfully updated",
@@ -115,12 +129,19 @@ func UserUpdateByUsername(c *fiber.Ctx) error {
 		Username: data["username"],
 	}
 
-	database.DB.Model(&models.User{}).Where(
+	database.DB.Model(user).Where(
 		"username = ?", paramUsername,
 	).
 		Updates(map[string]interface{}{
 			"username": user.Username,
+		}).Find(&user)
+
+	if user.Id == 0 {
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "cannot find user",
 		})
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "username successfully updated",
@@ -139,12 +160,19 @@ func UserUpdateByEmail(c *fiber.Ctx) error {
 		Email: data["email"],
 	}
 
-	database.DB.Model(&models.User{}).Where(
+	database.DB.Model(user).Where(
 		"username = ?", paramUsername,
 	).
 		Updates(map[string]interface{}{
 			"email": user.Email,
+		}).Find(&user)
+
+	if user.Id == 0 {
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "cannot find user",
 		})
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "email successfully updated",

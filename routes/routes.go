@@ -19,15 +19,21 @@ func Setup(app *fiber.App) {
 	user.Get("/get", controllers.UserGetAll)
 	user.Get("/get/username=:username", controllers.UserGetByUsername)
 	// USER DELETE
-	user.Delete("/username=:username", controllers.UserDeleteByUsername)
+	user.Delete("delete/username=:username", controllers.UserDeleteByUsername)
 	// USER UPDATE/PUT
-	user.Put("/name/username=:username", controllers.UserUpdateByName)
-	user.Put("/lastname/username=:username", controllers.UserUpdateByLastname)
-	user.Put("/username/username=:username", controllers.UserUpdateByUsername)
-	user.Put("/email/username=:username", controllers.UserUpdateByEmail)
-	user.Put("/ad/username=:username", controllers.UserUpdateByAd)
+	user.Put("update/name/username=:username", controllers.UserUpdateByName)
+	user.Put("update/lastname/username=:username", controllers.UserUpdateByLastname)
+	user.Put("update/username/username=:username", controllers.UserUpdateByUsername)
+	user.Put("update/email/username=:username", controllers.UserUpdateByEmail)
+	user.Put("update/ad/username=:username", controllers.UserUpdateByAd)
 
+	// AD CREATE
 	ad.Post("/create", controllers.CreateAd)
+	// AD READ
+	ad.Get("/get", controllers.AdGetAll)
+	ad.Get("/get/title=:title", controllers.AdGetByTitle)
+	// USER DELETE
+	ad.Delete("delete/title=:title", controllers.AdDeleteByTitle)
 
 	spec.Post("/create", controllers.CreateSpecify)
 

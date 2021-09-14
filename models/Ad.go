@@ -2,7 +2,7 @@ package models
 
 type Ad struct {
 	Id          uint     `json:"ad_id"`
-	Title       string   `json:"title"`
+	Title       string   `json:"title" gorm:"unique"`
 	Location    string   `json:"location"`
 	Description string   `json:"description"`
 	SpecifyId   uint     `json:"specify_id"`
