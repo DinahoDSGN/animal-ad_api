@@ -8,5 +8,5 @@ type User struct {
 	Email    string `json:"email" gorm:"unique" gorm:"<-"`
 	Password string `json:"password"`
 	AdId     uint   `json:"ad_id" gorm:"default:null" gorm:"<-"`
-	Ad       *Ad    `gorm:"foreignKey:AdId"`
+	Ad       []Ad   `gorm:"foreignKey:UserId"`
 }
