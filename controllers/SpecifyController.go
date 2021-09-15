@@ -109,22 +109,21 @@ func SpecifyUpdate(c *fiber.Ctx) error {
 		Passport:   passport,
 	}
 
-	database.DB.Model(&specify).Where("id = ?", paramId).Updates(&specify)
-
-	database.DB.Save(&specify)
-
-	database.DB.Raw("SELECT * FROM specifies WHERE id = ?", paramId).Find(&specify)
+	//database.DB.Raw("SELECT * FROM ads WHERE id = ?", paramId).Find(&specify)
+	database.DB.Model(&specify).Where("id = ?", paramId).Updates(&specify).Find(&specify)
 
 	if specify.Id == 0 {
 		return c.JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
-			"message": "cannot find specify by id",
+			"message": "cannot find ad by title",
 		})
 	}
 
+	database.DB.Save(&specify)
+
 	return c.JSON(fiber.Map{
 		"status":  fiber.StatusOK,
-		"message": "specify successfully updated",
+		"message": "title successfully updated",
 		"data":    specify,
 	})
 }

@@ -74,11 +74,7 @@ func UserUpdate(c *fiber.Ctx) error {
 		AdId:     uint(adId),
 	}
 
-	database.DB.Model(&user).Where("username = ?", paramUsername).Updates(&user)
-
-	database.DB.Save(&user)
-
-	database.DB.Raw("SELECT * FROM users WHERE username = ?", paramUsername).Find(&user)
+	database.DB.Model(&user).Where("username = ?", paramUsername).Updates(&user).Find(&user)
 
 	if user.Id == 0 {
 		return c.JSON(fiber.Map{
@@ -86,6 +82,8 @@ func UserUpdate(c *fiber.Ctx) error {
 			"message": "cannot find user by username",
 		})
 	}
+
+	database.DB.Save(&user)
 
 	return c.JSON(fiber.Map{
 		"status":  fiber.StatusOK,

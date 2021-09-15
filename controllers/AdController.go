@@ -108,11 +108,8 @@ func AdUpdate(c *fiber.Ctx) error {
 		UserId:      uint(authorId),
 	}
 
-	database.DB.Model(&ad).Where("title = ?", paramTitle).Updates(&ad)
-
-	database.DB.Save(&ad)
-
-	database.DB.Raw("SELECT * FROM ads WHERE title = ?", paramTitle).Find(&ad)
+	//database.DB.Raw("SELECT * FROM ads WHERE title = ?", paramTitle).Find(&ad)
+	database.DB.Model(&ad).Where("title = ?", paramTitle).Updates(&ad).Find(&ad)
 
 	if ad.Id == 0 {
 		return c.JSON(fiber.Map{
@@ -120,6 +117,8 @@ func AdUpdate(c *fiber.Ctx) error {
 			"message": "cannot find ad by title",
 		})
 	}
+
+	database.DB.Save(&ad)
 
 	return c.JSON(fiber.Map{
 		"status":  fiber.StatusOK,
