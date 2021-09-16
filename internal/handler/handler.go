@@ -1,12 +1,20 @@
-package routes
+package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"petcard/controllers"
+	"petcard/internal/controllers"
+	"petcard/pkg/services"
 )
 
-func Setup(app *fiber.App) {
+type Handler struct {
+	services *services.Service
+}
 
+func NewHandler(services *services.Service) *Handler {
+	return &Handler{services: services}
+}
+
+func (h *Handler) InitRoutes(app *fiber.App) {
 	app.Post("/api/register", controllers.Register)
 
 	api := app.Group("/api")
@@ -22,11 +30,11 @@ func Setup(app *fiber.App) {
 	user.Put("/:username", controllers.UserUpdate)
 
 	// ad endpoints
-	ad.Post("/create", controllers.CreateAd)
-	ad.Get("/", controllers.AdGetAll)
-	ad.Get("/:title", controllers.AdGetByTitle)
-	ad.Delete("/:title", controllers.AdDeleteByTitle)
-	ad.Put("/:title", controllers.AdUpdate)
+	ad.Post("/create", h.CreateAd)
+	ad.Get("/", h.GetAllAds)
+	ad.Get("/:id", h.GetListByTitle)
+	ad.Delete("/:id", h.Delete)
+	ad.Put("/:id", h.Update)
 
 	// specify endpoints
 	spec.Post("/create", controllers.CreateSpecify)
@@ -34,5 +42,4 @@ func Setup(app *fiber.App) {
 	spec.Get("/:id", controllers.SpecifyGetById)
 	spec.Delete("/:id", controllers.SpecifyDeleteById)
 	spec.Put("/:id", controllers.SpecifyUpdate)
-
 }

@@ -3,12 +3,12 @@ package database
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"petcard/migrations"
+	"petcard/internal/migrations"
 )
 
 var DB *gorm.DB
 
-func Connect() {
+func Connect() *gorm.DB {
 	connection, err := gorm.Open(mysql.Open("root:root@/petcard"), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: false,
 	})
@@ -24,4 +24,5 @@ func Connect() {
 		panic("could not run databaseConfig...")
 	}
 
+	return DB
 }

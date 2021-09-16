@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"petcard/database"
-	"petcard/models"
+	database "petcard/internal/database"
+	"petcard/internal/models"
 	"strconv"
 )
 

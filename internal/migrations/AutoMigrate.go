@@ -2,7 +2,7 @@ package migrations
 
 import (
 	"gorm.io/gorm"
-	"petcard/models"
+	models2 "petcard/internal/models"
 )
 
 func DatabaseConfig(connection *gorm.DB) error {
@@ -21,7 +21,7 @@ func DatabaseConfig(connection *gorm.DB) error {
 }
 
 func Migrate(connection *gorm.DB) error {
-	err := connection.AutoMigrate(&models.Ad{}, &models.Specify{}, &models.User{})
+	err := connection.AutoMigrate(&models2.Ad{}, &models2.Specify{}, &models2.User{})
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func Drop(connection *gorm.DB) error {
 }
 
 func SQLQueries(connection *gorm.DB) {
-	user := models.User{
+	user := models2.User{
 		Name:     "Niet",
 		Lastname: "Nazhimedenov",
 		Username: "dinahosl",
@@ -55,7 +55,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&user)
 
-	user = models.User{
+	user = models2.User{
 		Name:     "Angelina",
 		Lastname: "Fast",
 		Username: "fastik",
@@ -65,7 +65,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&user)
 
-	user = models.User{
+	user = models2.User{
 		Name:     "Abylai",
 		Lastname: "Abdreym",
 		Username: "abo_sya",
@@ -75,7 +75,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&user)
 
-	spec := models.Specify{
+	spec := models2.Specify{
 		Name:       "Snezhka",
 		Breed:      "Unknown",
 		Color:      "White",
@@ -87,7 +87,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&spec)
 
-	spec = models.Specify{
+	spec = models2.Specify{
 		Name:       "Simba",
 		Breed:      "Unknown",
 		Color:      "White",
@@ -99,7 +99,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&spec)
 
-	spec = models.Specify{
+	spec = models2.Specify{
 		Name:       "Asya",
 		Breed:      "Human",
 		Color:      "Black",
@@ -111,7 +111,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&spec)
 
-	ad := models.Ad{
+	ad := models2.Ad{
 		Title:       "My little Snezhka",
 		Location:    "Esik City",
 		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
@@ -121,7 +121,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&ad)
 
-	ad = models.Ad{
+	ad = models2.Ad{
 		Title:       "My little Simba",
 		Location:    "Esik City",
 		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
@@ -131,7 +131,7 @@ func SQLQueries(connection *gorm.DB) {
 
 	connection.Create(&ad)
 
-	ad = models.Ad{
+	ad = models2.Ad{
 		Title:       "My little Asya",
 		Location:    "Esik City",
 		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
