@@ -21,11 +21,11 @@ type User interface {
 }
 
 type Spec interface {
-	Create(data models.Specify) error
+	Create(data models.Specify) (int, error)
 	GetAll() ([]models.Specify, error)
 	GetList(id int) (models.Specify, error)
-	Delete(id int) error
-	Update(id int, data models.Specify) error
+	Delete(id int) (models.Specify, error)
+	Update(id int, data models.Specify) (models.Specify, error)
 }
 
 type Service struct {

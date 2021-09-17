@@ -13,7 +13,7 @@ func NewSpecRepo(db *gorm.DB) *SpecRepo {
 	return &SpecRepo{db: db}
 }
 
-func (database *SpecRepo) Create(data models.Specify) error {
+func (database *SpecRepo) Create(data models.Specify) (int, error) {
 	spec := models.Specify{
 		Name:       data.Name,
 		Breed:      data.Breed,
@@ -26,7 +26,7 @@ func (database *SpecRepo) Create(data models.Specify) error {
 
 	database.db.Create(&spec)
 
-	return nil
+	return int(spec.Id), nil
 }
 
 func (database *SpecRepo) GetAll() ([]models.Specify, error) {
@@ -44,17 +44,21 @@ func (database *SpecRepo) GetList(id int) (models.Specify, error) {
 	return data, nil
 }
 
-func (database *SpecRepo) Delete(id int) error {
+func (database *SpecRepo) Delete(id int) (models.Specify, error) {
 	var data models.Specify
 
-	database.db.Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
+	err := database.db.Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
+
+	if data.Id == 0 {
+		return data, err.Error
+	}
 
 	database.db.Delete(&data)
 
-	return nil
+	return data, nil
 }
 
-func (database *SpecRepo) Update(id int, data models.Specify) error {
+func (database *SpecRepo) Update(id int, data models.Specify) (models.Specify, error) {
 	spec := models.Specify{
 		Name:       data.Name,
 		Breed:      data.Breed,
@@ -67,7 +71,11 @@ func (database *SpecRepo) Update(id int, data models.Specify) error {
 
 	database.db.Model(&spec).Where("id = ?", id).Updates(&spec).Find(&spec)
 
+	if spec.Id == 0 {
+		return spec, nil
+	}
+
 	database.db.Save(&spec)
 
-	return nil
+	return spec, nil
 }
