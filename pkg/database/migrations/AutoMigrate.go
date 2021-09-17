@@ -37,6 +37,10 @@ func Drop(connection *gorm.DB) error {
 	if err != nil {
 		return err
 	}
+	err = connection.Migrator().DropTable("breeds")
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
