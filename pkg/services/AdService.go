@@ -1,7 +1,7 @@
 package services
 
 import (
-	"petcard/internal/models"
+	"petcard/pkg/models"
 	"petcard/pkg/repository"
 )
 
@@ -13,7 +13,7 @@ func NewAdService(repo repository.Ad) *AdService {
 	return &AdService{repo: repo}
 }
 
-func (s *AdService) Create(data models.Ad) error {
+func (s *AdService) Create(data models.Ad) (models.Ad, error) {
 	return s.repo.Create(data)
 }
 

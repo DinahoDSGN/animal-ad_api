@@ -2,11 +2,11 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 )
 
 type Ad interface {
-	Create(data models.Ad) error
+	Create(data models.Ad) (models.Ad, error)
 	GetAll() ([]models.Ad, error)
 	GetList(id int) (models.Ad, error)
 	Delete(id int) error

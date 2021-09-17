@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 	"strconv"
 )
 

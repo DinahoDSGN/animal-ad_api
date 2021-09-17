@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 )
 
 type UserRepo struct {
@@ -15,7 +15,7 @@ func NewUserRepo(db *gorm.DB) *UserRepo {
 
 func (database *UserRepo) GetAll() ([]models.User, error) {
 	var records []models.User
-	database.db.Find(&records)
+	database.db.Preload("Ad").Find(&records)
 
 	return records, nil
 }
@@ -45,7 +45,6 @@ func (database *UserRepo) Update(id int, data models.User) error {
 		Username: data.Username,
 		Email:    data.Email,
 		Password: data.Password,
-		AdId:     data.AdId,
 	}
 
 	database.db.Model(&user).Where("id = ?", id).Updates(&user).Find(&user)

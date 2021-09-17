@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 	"strconv"
 )
 
@@ -11,13 +11,17 @@ func (h *Handler) CreateAd(c *fiber.Ctx) error {
 	var JSONinput models.Ad
 
 	if err := c.BodyParser(&JSONinput); err != nil {
-		return err
+		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	data := h.services.Ad.Create(JSONinput)
+	data, err := h.services.Ad.Create(JSONinput)
+	if err != nil {
+		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+	}
 
 	return c.JSON(fiber.Map{
-		"data": data,
+		"status": fiber.StatusOK,
+		"data":   data,
 	})
 }
 

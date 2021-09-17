@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"petcard/internal/database"
-	"petcard/internal/handler"
+	"petcard/pkg/database"
+	"petcard/pkg/handler"
 	"petcard/pkg/repository"
 	"petcard/pkg/services"
 )

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"petcard/internal/controllers"
 	"petcard/pkg/services"
 )
 
@@ -15,7 +14,7 @@ func NewHandler(services *services.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes(app *fiber.App) {
-	app.Post("/api/register", controllers.Register)
+	//app.Post("/api/register", controllers.Register)
 
 	api := app.Group("/api")
 

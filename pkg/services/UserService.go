@@ -1,7 +1,7 @@
 package services
 
 import (
-	"petcard/internal/models"
+	"petcard/pkg/models"
 	"petcard/pkg/repository"
 )
 

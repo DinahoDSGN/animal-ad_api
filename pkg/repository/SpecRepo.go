@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 )
 
 type SpecRepo struct {

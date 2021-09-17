@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"petcard/internal/models"
+	"petcard/pkg/models"
 )
 
 type AdRepo struct {
@@ -13,7 +13,7 @@ func NewAdRepo(db *gorm.DB) *AdRepo {
 	return &AdRepo{db: db}
 }
 
-func (database *AdRepo) Create(data models.Ad) error {
+func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 	ad := models.Ad{
 		Title:       data.Title,
 		Location:    data.Location,
@@ -22,11 +22,13 @@ func (database *AdRepo) Create(data models.Ad) error {
 		UserId:      data.UserId,
 	}
 
+	ad.Location = NewLocationData(ad.Location)
+
 	database.db.Create(&ad)
 
 	database.db.Preload("Author").Preload("Specify").Table("ads").Find(&ad)
 
-	return nil
+	return ad, nil
 }
 
 func (database *AdRepo) GetAll() ([]models.Ad, error) {
