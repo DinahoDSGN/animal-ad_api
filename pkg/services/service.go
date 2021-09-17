@@ -28,16 +28,22 @@ type Spec interface {
 	Update(id int, data models2.Specify) (models2.Specify, error)
 }
 
+type Parser interface {
+	Push() error
+}
+
 type Service struct {
 	User
 	Ad
 	Spec
+	Parser
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		User: NewUserService(repos.User),
-		Ad:   NewAdService(repos.Ad),
-		Spec: NewSpecService(repos.Spec),
+		User:   NewUserService(repos.User),
+		Ad:     NewAdService(repos.Ad),
+		Spec:   NewSpecService(repos.Spec),
+		Parser: NewParserService(repos.Parser),
 	}
 }

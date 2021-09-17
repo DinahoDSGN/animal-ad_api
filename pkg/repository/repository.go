@@ -28,16 +28,22 @@ type Spec interface {
 	Update(id int, data models.Specify) (models.Specify, error)
 }
 
+type Parser interface {
+	Push() error
+}
+
 type Repository struct {
 	User
 	Ad
 	Spec
+	Parser
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		Spec: NewSpecRepo(db),
-		User: NewUserRepo(db),
-		Ad:   NewAdRepo(db),
+		Spec:   NewSpecRepo(db),
+		User:   NewUserRepo(db),
+		Ad:     NewAdRepo(db),
+		Parser: NewParserRepo(db),
 	}
 }
