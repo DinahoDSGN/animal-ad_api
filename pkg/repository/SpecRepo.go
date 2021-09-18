@@ -16,12 +16,13 @@ func NewSpecRepo(db *gorm.DB) *SpecRepo {
 func (database *SpecRepo) Create(data models.Specify) (int, error) {
 	spec := models.Specify{
 		Name:       data.Name,
-		Breed:      data.Breed,
+		BreedId:    data.BreedId,
 		Color:      data.Color,
 		Gender:     data.Gender,
 		Vaccinated: data.Vaccinated,
 		Spayed:     data.Spayed,
 		Passport:   data.Passport,
+		Price:      data.Price,
 	}
 
 	database.db.Create(&spec)
@@ -31,7 +32,7 @@ func (database *SpecRepo) Create(data models.Specify) (int, error) {
 
 func (database *SpecRepo) GetAll() ([]models.Specify, error) {
 	var records []models.Specify
-	database.db.Find(&records)
+	database.db.Preload("Breed").Find(&records)
 
 	return records, nil
 }
@@ -61,12 +62,13 @@ func (database *SpecRepo) Delete(id int) (models.Specify, error) {
 func (database *SpecRepo) Update(id int, data models.Specify) (models.Specify, error) {
 	spec := models.Specify{
 		Name:       data.Name,
-		Breed:      data.Breed,
+		BreedId:    data.BreedId,
 		Color:      data.Color,
 		Gender:     data.Gender,
 		Vaccinated: data.Vaccinated,
 		Spayed:     data.Spayed,
 		Passport:   data.Passport,
+		Price:      data.Price,
 	}
 
 	database.db.Model(&spec).Where("id = ?", id).Updates(&spec).Find(&spec)

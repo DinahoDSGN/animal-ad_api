@@ -24,7 +24,7 @@ func (database *ParserRepo) Push() error {
 		breed.Id = uint(i + 1)
 		breed.Name = name[i]
 		breed.Wool = wool[i]
-		breed.GlobalPrice = uint(price[i])
+		breed.GlobalPrice = int16(price[i])
 		database.db.Create(&breed)
 	}
 

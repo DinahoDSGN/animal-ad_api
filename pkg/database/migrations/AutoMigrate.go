@@ -6,9 +6,9 @@ import (
 )
 
 func DatabaseConfig(connection *gorm.DB) error {
-	Drop(connection)
-
-	Migrate(connection)
+	//Drop(connection)
+	//
+	//Migrate(connection)
 
 	//SQLQueries(connection)
 
