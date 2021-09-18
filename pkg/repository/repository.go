@@ -9,8 +9,8 @@ type Ad interface {
 	Create(data models.Ad) (models.Ad, error)
 	GetAll() ([]models.Ad, error)
 	GetList(id int) (models.Ad, error)
-	Delete(id int) error
-	Update(id int, data models.Ad) error
+	Delete(id int) (models.Ad, error)
+	Update(id int, data models.Ad) (models.Ad, error)
 }
 
 type User interface {
@@ -28,6 +28,14 @@ type Spec interface {
 	Update(id int, data models.Specify) (models.Specify, error)
 }
 
+type Breed interface {
+	Create(data models.Breed) (int, error)
+	GetAll() ([]models.Breed, error)
+	GetList(id int) (models.Breed, error)
+	Delete(id int) (models.Breed, error)
+	Update(id int, data models.Breed) (models.Breed, error)
+}
+
 type Parser interface {
 	Push() error
 }
@@ -36,6 +44,7 @@ type Repository struct {
 	User
 	Ad
 	Spec
+	Breed
 	Parser
 }
 
@@ -44,6 +53,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		Spec:   NewSpecRepo(db),
 		User:   NewUserRepo(db),
 		Ad:     NewAdRepo(db),
+		Breed:  NewBreedRepo(db),
 		Parser: NewParserRepo(db),
 	}
 }

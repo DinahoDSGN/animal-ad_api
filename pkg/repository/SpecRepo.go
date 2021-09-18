@@ -40,7 +40,7 @@ func (database *SpecRepo) GetAll() ([]models.Specify, error) {
 func (database *SpecRepo) GetList(id int) (models.Specify, error) {
 	var data models.Specify
 
-	database.db.Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
+	database.db.Preload("Breed").Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
 
 	return data, nil
 }

@@ -9,8 +9,8 @@ type Ad interface {
 	Create(data models2.Ad) (models2.Ad, error)
 	GetAll() ([]models2.Ad, error)
 	GetList(id int) (models2.Ad, error)
-	Delete(id int) error
-	Update(id int, data models2.Ad) error
+	Delete(id int) (models2.Ad, error)
+	Update(id int, data models2.Ad) (models2.Ad, error)
 }
 
 type User interface {
@@ -28,6 +28,14 @@ type Spec interface {
 	Update(id int, data models2.Specify) (models2.Specify, error)
 }
 
+type Breed interface {
+	Create(data models2.Breed) (int, error)
+	GetAll() ([]models2.Breed, error)
+	GetList(id int) (models2.Breed, error)
+	Delete(id int) (models2.Breed, error)
+	Update(id int, data models2.Breed) (models2.Breed, error)
+}
+
 type Parser interface {
 	Push() error
 }
@@ -36,6 +44,7 @@ type Service struct {
 	User
 	Ad
 	Spec
+	Breed
 	Parser
 }
 
@@ -44,6 +53,7 @@ func NewService(repos *repository.Repository) *Service {
 		User:   NewUserService(repos.User),
 		Ad:     NewAdService(repos.Ad),
 		Spec:   NewSpecService(repos.Spec),
+		Breed:  NewBreedService(repos.Breed),
 		Parser: NewParserService(repos.Parser),
 	}
 }

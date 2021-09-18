@@ -6,15 +6,28 @@ import (
 	"strconv"
 )
 
-// CreateAd @Router /api/ad/create [post]
-func (h *Handler) CreateAd(c *fiber.Ctx) error {
-	var JSONinput models.Ad
+// CreateBreed @Router /api/breed/create [POST]
+func (h *Handler) CreateBreed(c *fiber.Ctx) error {
+	JSONinput := models.Breed{}
 
 	if err := c.BodyParser(&JSONinput); err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	data, err := h.services.Ad.Create(JSONinput)
+	id, err := h.services.Breed.Create(JSONinput)
+	if err != nil {
+		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(fiber.Map{
+		"status": fiber.StatusOK,
+		"id":     id,
+	})
+}
+
+// GetAllBreeds @Router /api/breed/ [get]
+func (h *Handler) GetAllBreeds(c *fiber.Ctx) error {
+	data, err := h.services.Breed.GetAll()
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -25,27 +38,14 @@ func (h *Handler) CreateAd(c *fiber.Ctx) error {
 	})
 }
 
-// GetAllAds @Router /api/ad/ [get]
-func (h *Handler) GetAllAds(c *fiber.Ctx) error {
-	data, err := h.services.Ad.GetAll()
-	if err != nil {
-		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
-	}
-
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
-	})
-}
-
-// GetAdById @Router /api/ad/:id [get]
-func (h *Handler) GetAdById(c *fiber.Ctx) error {
+// GetBreedById @Router /api/breed/:id [get]
+func (h *Handler) GetBreedById(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Ad.GetList(paramId)
+	data, err := h.services.Breed.GetList(paramId)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -60,14 +60,14 @@ func (h *Handler) GetAdById(c *fiber.Ctx) error {
 	})
 }
 
-// DeleteAd @Router /api/ad/:id [delete]
-func (h *Handler) DeleteAd(c *fiber.Ctx) error {
+// DeleteBreed @Router /api/breed/:id [DELETE]
+func (h *Handler) DeleteBreed(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Ad.Delete(paramId)
+	data, err := h.services.Breed.Delete(paramId)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -82,9 +82,9 @@ func (h *Handler) DeleteAd(c *fiber.Ctx) error {
 	})
 }
 
-// UpdateAd @Router /api/ad/:id [put]
-func (h *Handler) UpdateAd(c *fiber.Ctx) error {
-	var JSONinput models.Ad
+// UpdateBreed @Router /api/breed/:id [PUT]
+func (h *Handler) UpdateBreed(c *fiber.Ctx) error {
+	JSONinput := models.Breed{}
 
 	if err := c.BodyParser(&JSONinput); err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
@@ -95,7 +95,7 @@ func (h *Handler) UpdateAd(c *fiber.Ctx) error {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Ad.Update(paramId, JSONinput)
+	data, err := h.services.Breed.Update(paramId, JSONinput)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}

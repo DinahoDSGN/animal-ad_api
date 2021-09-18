@@ -45,17 +45,21 @@ func (database *AdRepo) GetList(id int) (models.Ad, error) {
 	return data, nil
 }
 
-func (database *AdRepo) Delete(id int) error {
+func (database *AdRepo) Delete(id int) (models.Ad, error) {
 	var data models.Ad
 
 	database.db.Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
 
+	if data.Id == 0 {
+		return data, nil
+	}
+
 	database.db.Delete(&data)
 
-	return nil
+	return data, nil
 }
 
-func (database *AdRepo) Update(id int, data models.Ad) error {
+func (database *AdRepo) Update(id int, data models.Ad) (models.Ad, error) {
 	ad := models.Ad{
 		Title:       data.Title,
 		Location:    data.Location,
@@ -66,7 +70,11 @@ func (database *AdRepo) Update(id int, data models.Ad) error {
 
 	database.db.Model(&ad).Where("id = ?", id).Updates(&ad).Find(&ad)
 
+	if ad.Id == 0 {
+		return ad, nil
+	}
+
 	database.db.Save(&ad)
 
-	return nil
+	return ad, nil
 }

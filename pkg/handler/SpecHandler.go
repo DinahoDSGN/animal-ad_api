@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// CreateSpec @Router /api/spec/create [post]
+// CreateSpec @Router /api/spec/create [POST]
 func (h *Handler) CreateSpec(c *fiber.Ctx) error {
 	var JSONinput models.Specify
 
@@ -25,7 +25,7 @@ func (h *Handler) CreateSpec(c *fiber.Ctx) error {
 	})
 }
 
-// GetAllSpecs @Router /api/spec/ [get]
+// GetAllSpecs @Router /api/spec/ [GET]
 func (h *Handler) GetAllSpecs(c *fiber.Ctx) error {
 	data, err := h.services.Spec.GetAll()
 	if err != nil {
@@ -38,7 +38,7 @@ func (h *Handler) GetAllSpecs(c *fiber.Ctx) error {
 	})
 }
 
-// GetSpecById @Router /api/spec/:id [get]
+// GetSpecById @Router /api/spec/:id [GET]
 func (h *Handler) GetSpecById(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
@@ -60,7 +60,7 @@ func (h *Handler) GetSpecById(c *fiber.Ctx) error {
 	})
 }
 
-// DeleteSpec @Router /api/spec/:id [delete]
+// DeleteSpec @Router /api/spec/:id [DELETE]
 func (h *Handler) DeleteSpec(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
@@ -81,7 +81,7 @@ func (h *Handler) DeleteSpec(c *fiber.Ctx) error {
 	})
 }
 
-// UpdateSpec @Router /api/spec/:id [put]
+// UpdateSpec @Router /api/spec/:id [PUT]
 func (h *Handler) UpdateSpec(c *fiber.Ctx) error {
 	var JSONinput models.Specify
 

@@ -22,6 +22,7 @@ func (h *Handler) InitRoutes(app *fiber.App) {
 	ad := api.Group("/ad")
 	spec := api.Group("/spec")
 	parser := api.Group("/parser")
+	breed := api.Group("/breed")
 
 	// user endpoints
 	user.Get("/", h.GetAllUsers)
@@ -42,6 +43,13 @@ func (h *Handler) InitRoutes(app *fiber.App) {
 	spec.Get("/:id", h.GetSpecById)
 	spec.Delete("/:id", h.DeleteSpec)
 	spec.Put("/:id", h.UpdateSpec)
+
+	// breed endpoints
+	breed.Post("/create", h.CreateBreed)
+	breed.Get("/", h.GetAllBreeds)
+	breed.Get("/:id", h.GetBreedById)
+	breed.Delete("/:id", h.DeleteBreed)
+	breed.Put("/:id", h.UpdateBreed)
 
 	//
 	parser.Post("/push", h.Push)

@@ -25,10 +25,10 @@ func (s *AdService) GetList(id int) (models.Ad, error) {
 	return s.repo.GetList(id)
 }
 
-func (s *AdService) Delete(id int) error {
+func (s *AdService) Delete(id int) (models.Ad, error) {
 	return s.repo.Delete(id)
 }
 
-func (s *AdService) Update(id int, data models.Ad) error {
+func (s *AdService) Update(id int, data models.Ad) (models.Ad, error) {
 	return s.repo.Update(id, data)
 }
