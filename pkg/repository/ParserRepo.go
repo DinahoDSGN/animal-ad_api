@@ -23,6 +23,7 @@ func (database *ParserRepo) Push() error {
 	for i := 0; i < len(name); i++ {
 		breed.Id = uint(i + 1)
 		breed.Name = name[i]
+		breed.Type = "Кошка"
 		breed.Wool = wool[i]
 		breed.GlobalPrice = int16(price[i])
 		database.db.Create(&breed)

@@ -5,8 +5,8 @@ type Ad struct {
 	Title       string   `json:"title" gorm:"unique"`
 	Location    string   `json:"location"`
 	Description string   `json:"description"`
-	SpecifyId   uint     `json:"specify_id"`
+	SpecifyId   uint     `json:"-"`
 	Specify     *Specify `gorm:"foreignKey:SpecifyId"`
-	UserId      uint     `json:"author_id"`
+	UserId      uint     `json:"-"`
 	Author      *User    `gorm:"foreignKey:UserId"`
 }

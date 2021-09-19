@@ -27,14 +27,14 @@ func (database *BreedRepo) Create(data models.Breed) (int, error) {
 
 func (database *BreedRepo) GetAll() ([]models.Breed, error) {
 	var records []models.Breed
-	database.db.Find(&records)
+	database.db.Preload("Animal").Find(&records)
 
 	return records, nil
 }
 
 func (database *BreedRepo) GetList(id int) (models.Breed, error) {
 	var data models.Breed
-	database.db.Raw("SELECT * FROM breeds WHERE id = ?", id).Find(&data)
+	database.db.Preload("Animal").Raw("SELECT * FROM breeds WHERE id = ?", id).Find(&data)
 
 	return data, nil
 }

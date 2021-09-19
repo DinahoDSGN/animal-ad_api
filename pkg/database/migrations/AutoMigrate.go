@@ -7,8 +7,8 @@ import (
 
 func DatabaseConfig(connection *gorm.DB) error {
 	//Drop(connection)
-	//
-	//Migrate(connection)
+
+	Migrate(connection)
 
 	//SQLQueries(connection)
 
@@ -16,7 +16,7 @@ func DatabaseConfig(connection *gorm.DB) error {
 }
 
 func Migrate(connection *gorm.DB) error {
-	err := connection.AutoMigrate(&models.Ad{}, &models.Specify{}, &models.User{}, &models.Breed{})
+	err := connection.AutoMigrate(&models.Breed{}, &models.Ad{}, &models.Specify{}, &models.User{})
 	if err != nil {
 		return err
 	}
