@@ -21,10 +21,10 @@ func (s *UserService) GetList(id int) (models.User, error) {
 	return s.repo.GetList(id)
 }
 
-func (s *UserService) Delete(id int) error {
+func (s *UserService) Delete(id int) (models.User, error) {
 	return s.repo.Delete(id)
 }
 
-func (s *UserService) Update(id int, data models.User) error {
+func (s *UserService) Update(id int, data models.User) (models.User, error) {
 	return s.repo.Update(id, data)
 }

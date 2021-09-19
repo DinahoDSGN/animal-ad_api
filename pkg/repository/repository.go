@@ -5,6 +5,11 @@ import (
 	"petcard/pkg/models"
 )
 
+type Authorization interface {
+	SignIn(data models.User) (models.User, error)
+	SignUp(data models.User) (models.User, error)
+}
+
 type Ad interface {
 	Create(data models.Ad) (models.Ad, error)
 	GetAll() ([]models.Ad, error)
@@ -16,8 +21,8 @@ type Ad interface {
 type User interface {
 	GetAll() ([]models.User, error)
 	GetList(id int) (models.User, error)
-	Delete(id int) error
-	Update(id int, data models.User) error
+	Delete(id int) (models.User, error)
+	Update(id int, data models.User) (models.User, error)
 }
 
 type Animal interface {
@@ -41,6 +46,7 @@ type Parser interface {
 }
 
 type Repository struct {
+	Authorization
 	User
 	Ad
 	Animal
@@ -50,10 +56,11 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		Animal: NewAnimalRepo(db),
-		User:   NewUserRepo(db),
-		Ad:     NewAdRepo(db),
-		Breed:  NewBreedRepo(db),
-		Parser: NewParserRepo(db),
+		Authorization: NewAuthorizationRepo(db),
+		Animal:        NewAnimalRepo(db),
+		User:          NewUserRepo(db),
+		Ad:            NewAdRepo(db),
+		Breed:         NewBreedRepo(db),
+		Parser:        NewParserRepo(db),
 	}
 }

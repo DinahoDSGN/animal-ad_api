@@ -5,6 +5,11 @@ import (
 	"petcard/pkg/repository"
 )
 
+type Authorization interface {
+	SignIn(data models2.User) (models2.User, error)
+	SignUp(data models2.User) (models2.User, error)
+}
+
 type Ad interface {
 	Create(data models2.Ad) (models2.Ad, error)
 	GetAll() ([]models2.Ad, error)
@@ -16,8 +21,8 @@ type Ad interface {
 type User interface {
 	GetAll() ([]models2.User, error)
 	GetList(id int) (models2.User, error)
-	Delete(id int) error
-	Update(id int, data models2.User) error
+	Delete(id int) (models2.User, error)
+	Update(id int, data models2.User) (models2.User, error)
 }
 
 type Animal interface {
@@ -41,6 +46,7 @@ type Parser interface {
 }
 
 type Service struct {
+	Authorization
 	User
 	Ad
 	Animal
@@ -50,10 +56,11 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		User:   NewUserService(repos.User),
-		Ad:     NewAdService(repos.Ad),
-		Animal: NewAnimalService(repos.Animal),
-		Breed:  NewBreedService(repos.Breed),
-		Parser: NewParserService(repos.Parser),
+		Authorization: NewAuthorizationService(repos.Authorization),
+		User:          NewUserService(repos.User),
+		Ad:            NewAdService(repos.Ad),
+		Animal:        NewAnimalService(repos.Animal),
+		Breed:         NewBreedService(repos.Breed),
+		Parser:        NewParserService(repos.Parser),
 	}
 }

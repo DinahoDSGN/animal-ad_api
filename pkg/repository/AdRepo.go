@@ -33,14 +33,14 @@ func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 
 func (database *AdRepo) GetAll() ([]models.Ad, error) {
 	var records []models.Ad
-	database.db.Preload("Animal").Preload("Author").Find(&records)
+	database.db.Preload("Author").Preload("Animal.Breed").Find(&records)
 
 	return records, nil
 }
 
 func (database *AdRepo) GetList(id int) (models.Ad, error) {
 	var data models.Ad
-	database.db.Preload("Animal.Breed").Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
+	database.db.Preload("Author").Preload("Animal.Breed").Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
 
 	return data, nil
 }

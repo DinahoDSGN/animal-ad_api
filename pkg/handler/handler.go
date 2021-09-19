@@ -14,7 +14,8 @@ func NewHandler(services *services.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes(app *fiber.App) {
-	//app.Post("/api/register", controllers.Register)
+	app.Post("/api/signup", h.SignUp)
+	app.Post("/api/signin", h.SignIn)
 
 	api := app.Group("/api")
 
