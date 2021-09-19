@@ -1,12 +1,12 @@
 package models
 
 type Ad struct {
-	Id          uint     `json:"ad_id"`
-	Title       string   `json:"title" gorm:"unique"`
-	Location    string   `json:"location"`
-	Description string   `json:"description"`
-	SpecifyId   uint     `json:"-"`
-	Specify     *Specify `gorm:"foreignKey:SpecifyId"`
-	UserId      uint     `json:"-"`
-	Author      *User    `gorm:"foreignKey:UserId"`
+	Id          uint    `json:"ad_id"`
+	Title       string  `json:"title" gorm:"unique"`
+	Location    string  `json:"location"`
+	Description string  `json:"description"`
+	AnimalId    uint    `json:"animal_id"`
+	Animal      *Animal `gorm:"foreignKey:AnimalId"`
+	AuthorId    uint    `json:"author_id"`
+	Author      *User   `gorm:"foreignKey:AuthorId"`
 }

@@ -20,12 +20,12 @@ type User interface {
 	Update(id int, data models2.User) error
 }
 
-type Spec interface {
-	Create(data models2.Specify) (int, error)
-	GetAll() ([]models2.Specify, error)
-	GetList(id int) (models2.Specify, error)
-	Delete(id int) (models2.Specify, error)
-	Update(id int, data models2.Specify) (models2.Specify, error)
+type Animal interface {
+	Create(data models2.Animal) (int, error)
+	GetAll() ([]models2.Animal, error)
+	GetList(id int) (models2.Animal, error)
+	Delete(id int) (models2.Animal, error)
+	Update(id int, data models2.Animal) (models2.Animal, error)
 }
 
 type Breed interface {
@@ -43,7 +43,7 @@ type Parser interface {
 type Service struct {
 	User
 	Ad
-	Spec
+	Animal
 	Breed
 	Parser
 }
@@ -52,7 +52,7 @@ func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		User:   NewUserService(repos.User),
 		Ad:     NewAdService(repos.Ad),
-		Spec:   NewSpecService(repos.Spec),
+		Animal: NewAnimalService(repos.Animal),
 		Breed:  NewBreedService(repos.Breed),
 		Parser: NewParserService(repos.Parser),
 	}

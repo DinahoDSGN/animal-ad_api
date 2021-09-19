@@ -5,16 +5,16 @@ import (
 	"petcard/pkg/models"
 )
 
-type SpecRepo struct {
+type AnimalRepo struct {
 	db *gorm.DB
 }
 
-func NewSpecRepo(db *gorm.DB) *SpecRepo {
-	return &SpecRepo{db: db}
+func NewAnimalRepo(db *gorm.DB) *AnimalRepo {
+	return &AnimalRepo{db: db}
 }
 
-func (database *SpecRepo) Create(data models.Specify) (int, error) {
-	spec := models.Specify{
+func (database *AnimalRepo) Create(data models.Animal) (int, error) {
+	spec := models.Animal{
 		Name:       data.Name,
 		BreedId:    data.BreedId,
 		Color:      data.Color,
@@ -30,25 +30,25 @@ func (database *SpecRepo) Create(data models.Specify) (int, error) {
 	return int(spec.Id), nil
 }
 
-func (database *SpecRepo) GetAll() ([]models.Specify, error) {
-	var records []models.Specify
+func (database *AnimalRepo) GetAll() ([]models.Animal, error) {
+	var records []models.Animal
 	database.db.Preload("Breed").Find(&records)
 
 	return records, nil
 }
 
-func (database *SpecRepo) GetList(id int) (models.Specify, error) {
-	var data models.Specify
+func (database *AnimalRepo) GetList(id int) (models.Animal, error) {
+	var data models.Animal
 
-	database.db.Preload("Breed").Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
+	database.db.Preload("Breed").Raw("SELECT * FROM animals WHERE id = ?", id).Find(&data)
 
 	return data, nil
 }
 
-func (database *SpecRepo) Delete(id int) (models.Specify, error) {
-	var data models.Specify
+func (database *AnimalRepo) Delete(id int) (models.Animal, error) {
+	var data models.Animal
 
-	err := database.db.Raw("SELECT * FROM specifies WHERE id = ?", id).Find(&data)
+	err := database.db.Raw("SELECT * FROM animals WHERE id = ?", id).Find(&data)
 
 	if data.Id == 0 {
 		return data, err.Error
@@ -59,8 +59,8 @@ func (database *SpecRepo) Delete(id int) (models.Specify, error) {
 	return data, nil
 }
 
-func (database *SpecRepo) Update(id int, data models.Specify) (models.Specify, error) {
-	spec := models.Specify{
+func (database *AnimalRepo) Update(id int, data models.Animal) (models.Animal, error) {
+	spec := models.Animal{
 		Name:       data.Name,
 		BreedId:    data.BreedId,
 		Color:      data.Color,

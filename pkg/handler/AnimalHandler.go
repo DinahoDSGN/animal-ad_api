@@ -6,15 +6,15 @@ import (
 	"strconv"
 )
 
-// CreateSpec @Router /api/spec/create [POST]
-func (h *Handler) CreateSpec(c *fiber.Ctx) error {
-	var JSONinput models.Specify
+// CreateAnimal @Router /api/spec/create [POST]
+func (h *Handler) CreateAnimal(c *fiber.Ctx) error {
+	var JSONinput models.Animal
 
 	if err := c.BodyParser(&JSONinput); err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	id, err := h.services.Spec.Create(JSONinput)
+	id, err := h.services.Animal.Create(JSONinput)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -25,9 +25,9 @@ func (h *Handler) CreateSpec(c *fiber.Ctx) error {
 	})
 }
 
-// GetAllSpecs @Router /api/spec/ [GET]
-func (h *Handler) GetAllSpecs(c *fiber.Ctx) error {
-	data, err := h.services.Spec.GetAll()
+// GetAllAnimals @Router /api/spec/ [GET]
+func (h *Handler) GetAllAnimals(c *fiber.Ctx) error {
+	data, err := h.services.Animal.GetAll()
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -38,14 +38,14 @@ func (h *Handler) GetAllSpecs(c *fiber.Ctx) error {
 	})
 }
 
-// GetSpecById @Router /api/spec/:id [GET]
-func (h *Handler) GetSpecById(c *fiber.Ctx) error {
+// GetAnimalById @Router /api/spec/:id [GET]
+func (h *Handler) GetAnimalById(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Spec.GetList(paramId)
+	data, err := h.services.Animal.GetList(paramId)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -60,14 +60,14 @@ func (h *Handler) GetSpecById(c *fiber.Ctx) error {
 	})
 }
 
-// DeleteSpec @Router /api/spec/:id [DELETE]
-func (h *Handler) DeleteSpec(c *fiber.Ctx) error {
+// DeleteAnimal @Router /api/spec/:id [DELETE]
+func (h *Handler) DeleteAnimal(c *fiber.Ctx) error {
 	paramId, _ := strconv.Atoi(c.Params("id"))
 	if paramId <= 0 {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Spec.Delete(paramId)
+	data, err := h.services.Animal.Delete(paramId)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -81,9 +81,9 @@ func (h *Handler) DeleteSpec(c *fiber.Ctx) error {
 	})
 }
 
-// UpdateSpec @Router /api/spec/:id [PUT]
-func (h *Handler) UpdateSpec(c *fiber.Ctx) error {
-	var JSONinput models.Specify
+// UpdateAnimal @Router /api/spec/:id [PUT]
+func (h *Handler) UpdateAnimal(c *fiber.Ctx) error {
+	var JSONinput models.Animal
 
 	if err := c.BodyParser(&JSONinput); err != nil {
 		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
@@ -94,7 +94,7 @@ func (h *Handler) UpdateSpec(c *fiber.Ctx) error {
 		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
 	}
 
-	data, err := h.services.Spec.Update(paramId, JSONinput)
+	data, err := h.services.Animal.Update(paramId, JSONinput)
 	if err != nil {
 		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}

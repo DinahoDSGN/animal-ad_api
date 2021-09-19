@@ -22,17 +22,17 @@
 
 `/api/ad/4` Update ad by id [PUT]
 
-## Specify endpoints
+## Animal endpoints
 
-`/api/spec/create` Create specify [POST]
+`/api/spec/create` Create animal [POST]
 
 `/api/spec/` Get all specifies [GET]
 
-`/api/spec/10` Get specify by id [GET]
+`/api/spec/10` Get animal by id [GET]
 
-`/api/spec/12` Delete specify by id [DELETE]
+`/api/spec/12` Delete animal by id [DELETE]
 
-`/api/spec/4` Update specify by id [PUT]
+`/api/spec/4` Update animal by id [PUT]
 
 ## Parser endpoints
 

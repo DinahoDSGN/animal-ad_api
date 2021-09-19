@@ -7,5 +7,5 @@ type User struct {
 	Username string `json:"username" gorm:"unique" gorm:"<-"`
 	Email    string `json:"email" gorm:"unique" gorm:"<-"`
 	Password string `json:"password"`
-	Ad       []Ad   `gorm:"foreignKey:UserId" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Ad       []Ad   `gorm:"foreignKey:AuthorId" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

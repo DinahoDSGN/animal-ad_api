@@ -1,10 +1,11 @@
 package models
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 )
 
-type Specify struct { // Animal struct
+type Animal struct { // Animal struct
 	Id         uint   `json:"spec_id"`
 	Name       string `json:"name"`
 	Type       string `json:"type"`
@@ -13,20 +14,21 @@ type Specify struct { // Animal struct
 	Vaccinated bool   `json:"vaccinated" gorm:"type:bool"`
 	Spayed     bool   `json:"spayed" gorm:"type:bool"`
 	Passport   bool   `json:"passport" gorm:"type:bool"`
-	BreedId    uint   `json:"-"`
+	BreedId    uint   `json:"breed_id"`
 	Breed      *Breed `gorm:"foreignKey:BreedId"`
 	Price      int16  `json:"price"`
 	Profit     int16  `json:"profit"`
 }
 
-func (s *Specify) BeforeCreate(tx *gorm.DB) (err error) {
-	specify := s
+func (s *Animal) BeforeCreate(tx *gorm.DB) (err error) {
+	animal := s
 
-	tx.Preload("Breed").Raw("SELECT * FROM specifies WHERE id = ?", s.Id).Find(&specify)
+	tx.Preload("Breed").Raw("SELECT * FROM animals WHERE id = ?", s.Id).Find(&animal)
 	if s.Breed != nil {
-		s.Type = specify.Breed.Type
+		s.Type = animal.Breed.Type
 
-		profit := s.Price - specify.Breed.GlobalPrice
+		profit := s.Price - animal.Breed.GlobalPrice
+		fmt.Println(profit)
 		if profit > 0 {
 			s.Profit = -profit
 			return
@@ -38,16 +40,16 @@ func (s *Specify) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (s *Specify) AfterUpdate(database *gorm.DB) error {
-	database.Preload("Breed").Raw("SELECT * FROM specifies WHERE id = ?", s.Id).Find(&s)
+func (s *Animal) AfterUpdate(database *gorm.DB) error {
+	database.Preload("Breed").Raw("SELECT * FROM animals WHERE id = ?", s.Id).Find(&s)
 	if s.Breed != nil {
 		profit := s.Price - s.Breed.GlobalPrice
 		if profit > 0 {
-			database.Table("specifies").Where("id = ?", s.Id).Update("profit", profit)
+			database.Table("animals").Where("id = ?", s.Id).Update("profit", profit)
 			return nil
 		}
 
-		database.Table("specifies").Where("id = ?", s.Id).Update("profit", profit)
+		database.Table("animals").Where("id = ?", s.Id).Update("profit", profit)
 
 		return nil
 	}

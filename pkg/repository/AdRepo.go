@@ -18,29 +18,29 @@ func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 		Title:       data.Title,
 		Location:    data.Location,
 		Description: data.Description,
-		SpecifyId:   data.SpecifyId,
-		UserId:      data.UserId,
+		AnimalId:    data.AnimalId,
+		AuthorId:    data.AuthorId,
 	}
 
 	ad.Location = NewLocationData(ad.Location)
 
 	database.db.Create(&ad)
 
-	database.db.Preload("Author").Preload("Specify").Table("ads").Find(&ad)
+	database.db.Preload("Animal.Breed").Preload("Animal").Table("ads").Find(&ad)
 
 	return ad, nil
 }
 
 func (database *AdRepo) GetAll() ([]models.Ad, error) {
 	var records []models.Ad
-	database.db.Preload("Specify").Preload("Author").Find(&records)
+	database.db.Preload("Animal").Preload("Author").Find(&records)
 
 	return records, nil
 }
 
 func (database *AdRepo) GetList(id int) (models.Ad, error) {
 	var data models.Ad
-	database.db.Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
+	database.db.Preload("Animal.Breed").Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
 
 	return data, nil
 }
@@ -64,8 +64,8 @@ func (database *AdRepo) Update(id int, data models.Ad) (models.Ad, error) {
 		Title:       data.Title,
 		Location:    data.Location,
 		Description: data.Description,
-		SpecifyId:   data.SpecifyId,
-		UserId:      data.UserId,
+		AnimalId:    data.AnimalId,
+		AuthorId:    data.AuthorId,
 	}
 
 	database.db.Model(&ad).Where("id = ?", id).Updates(&ad).Find(&ad)

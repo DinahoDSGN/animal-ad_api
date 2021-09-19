@@ -16,7 +16,7 @@ func DatabaseConfig(connection *gorm.DB) error {
 }
 
 func Migrate(connection *gorm.DB) error {
-	err := connection.AutoMigrate(&models.Breed{}, &models.Ad{}, &models.Specify{}, &models.User{})
+	err := connection.AutoMigrate(&models.Ad{}, &models.Animal{}, &models.User{}, &models.Breed{})
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	connection.Create(&user)
 //
-//	spec := models.Specify{
+//	spec := models.Animal{
 //		Name:       "Snezhka",
 //		Breed:      "Unknown",
 //		Color:      "White",
@@ -87,7 +87,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	connection.Create(&spec)
 //
-//	spec = models.Specify{
+//	spec = models.Animal{
 //		Name:       "Simba",
 //		Breed:      "Unknown",
 //		Color:      "White",
@@ -99,7 +99,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	connection.Create(&spec)
 //
-//	spec = models.Specify{
+//	spec = models.Animal{
 //		Name:       "Asya",
 //		Breed:      "Human",
 //		Color:      "Black",

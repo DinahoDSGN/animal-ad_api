@@ -20,12 +20,12 @@ type User interface {
 	Update(id int, data models.User) error
 }
 
-type Spec interface {
-	Create(data models.Specify) (int, error)
-	GetAll() ([]models.Specify, error)
-	GetList(id int) (models.Specify, error)
-	Delete(id int) (models.Specify, error)
-	Update(id int, data models.Specify) (models.Specify, error)
+type Animal interface {
+	Create(data models.Animal) (int, error)
+	GetAll() ([]models.Animal, error)
+	GetList(id int) (models.Animal, error)
+	Delete(id int) (models.Animal, error)
+	Update(id int, data models.Animal) (models.Animal, error)
 }
 
 type Breed interface {
@@ -43,14 +43,14 @@ type Parser interface {
 type Repository struct {
 	User
 	Ad
-	Spec
+	Animal
 	Breed
 	Parser
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		Spec:   NewSpecRepo(db),
+		Animal: NewAnimalRepo(db),
 		User:   NewUserRepo(db),
 		Ad:     NewAdRepo(db),
 		Breed:  NewBreedRepo(db),
