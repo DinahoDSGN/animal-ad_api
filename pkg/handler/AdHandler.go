@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"petcard/pkg/database"
 	"petcard/pkg/models"
 	"strconv"
 )
@@ -109,3 +110,82 @@ func (h *Handler) UpdateAd(c *fiber.Ctx) error {
 		"data":   data,
 	})
 }
+
+func (h *Handler) SortBy(c *fiber.Ctx) error {
+	paramBy := c.Params("by")
+	if paramBy == "asc" {
+		data := h.SortByAscending()
+		return c.JSON(fiber.Map{
+			"status": fiber.StatusOK,
+			"method": "Ad price by ascending",
+			"data":   data,
+		})
+	}
+	if paramBy == "desc" {
+		data := h.SortByDescending()
+		return c.JSON(fiber.Map{
+			"status": fiber.StatusOK,
+			"method": "Ad price by descending",
+			"data":   data,
+		})
+	}
+
+	return nil
+}
+
+func (h *Handler) SortByAscending() []models.Ad {
+	db := database.DB
+
+	data, _ := h.services.Ad.GetAll()
+	db.Model(data).Preload("Animal").Select("ads.*", "animals.*").
+		Joins("INNER JOIN animals ON animals.id = ads.animal_id").
+		Order("price asc").
+		Find(&data)
+
+	return data
+}
+
+func (h *Handler) SortByDescending() []models.Ad {
+	db := database.DB
+
+	data, _ := h.services.Ad.GetAll()
+	db.Model(data).Preload("Animal").Select("ads.*", "animals.*").
+		Joins("INNER JOIN animals ON animals.id = ads.animal_id").
+		Order("price desc").
+		Find(&data)
+
+	return data
+}
+
+//func (h *Handler) SortBy(c *fiber.Ctx) error{
+//	db := database.DB
+//
+//	paramType := c.Query("type")
+//	if paramType == ""{
+//		paramType = "cat"
+//	}
+//	paramPriceGT := c.Query("price_gt")
+//	if paramPriceGT == ""{
+//		paramPriceGT = "0"
+//	}
+//	paramPriceLT := c.Query("price_lt")
+//	if paramPriceLT == ""{
+//		paramPriceLT = "0"
+//	}
+//
+//	data, _ := h.services.Ad.GetAll()
+//
+//	db.Model(data).Preload("Animal").
+//		Select("ads.*", "animals.*").
+//		Joins("INNER JOIN animals ON animals.id = ads.animal_id").
+//		Where("type = ?", paramType).
+//		Where("price > ?", paramPriceGT).
+//		Where("price < ?", paramPriceLT).
+//		Find(&data)
+//
+//	return c.JSON(fiber.Map{
+//		"status" : fiber.StatusOK,
+//		"method" : "Sort by type",
+//		"data" : data,
+//	})
+//}

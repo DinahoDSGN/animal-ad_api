@@ -52,6 +52,8 @@ func (h *Handler) InitRoutes(app *fiber.App) {
 	breed.Delete("/:id", h.DeleteBreed)
 	breed.Put("/:id", h.UpdateBreed)
 
-	//
+	ad.Get("/sort/by=:by", h.SortBy)
+	ad.Get("/sort/by=:by", h.SortBy)
+
 	parser.Post("/push", h.Push)
 }
