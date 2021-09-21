@@ -8,6 +8,7 @@ import (
 type Authorization interface {
 	SignIn(data models.User) (models.User, error)
 	SignUp(data models.User) (models.User, error)
+	GetUser(username string, password string) (models.User, error)
 }
 
 type Ad interface {

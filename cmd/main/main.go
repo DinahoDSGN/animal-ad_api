@@ -1,8 +1,7 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gin-gonic/gin"
 	"petcard/pkg/database"
 	"petcard/pkg/handler"
 	"petcard/pkg/repository"
@@ -10,7 +9,11 @@ import (
 )
 
 func main() {
-	app := fiber.New()
+	app := gin.Default()
+
+	app.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
+	})
 
 	repos := repository.NewRepository(database.Connect())
 	services := services.NewService(repos)
@@ -18,9 +21,5 @@ func main() {
 
 	handlers.InitRoutes(app)
 
-	app.Use(cors.New(cors.Config{
-		AllowCredentials: true,
-	}))
-
-	app.Listen(":8888")
+	app.Run()
 }

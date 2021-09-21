@@ -1,110 +1,107 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
+	"net/http"
 	"petcard/pkg/models"
 	"strconv"
 )
 
 // CreateAnimal @Router /api/spec/create [POST]
-func (h *Handler) CreateAnimal(c *fiber.Ctx) error {
+func (h *Handler) CreateAnimal(c *gin.Context) {
 	var JSONinput models.Animal
 
-	if err := c.BodyParser(&JSONinput); err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
 	}
 
 	id, err := h.services.Animal.Create(JSONinput)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"id":     id,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": id,
 	})
 }
 
 // GetAllAnimals @Router /api/spec/ [GET]
-func (h *Handler) GetAllAnimals(c *fiber.Ctx) error {
+func (h *Handler) GetAllAnimals(c *gin.Context) {
 	data, err := h.services.Animal.GetAll()
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
 
 // GetAnimalById @Router /api/spec/:id [GET]
-func (h *Handler) GetAnimalById(c *fiber.Ctx) error {
-	paramId, _ := strconv.Atoi(c.Params("id"))
+func (h *Handler) GetAnimalById(c *gin.Context) {
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.Animal.GetList(paramId)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
 
 // DeleteAnimal @Router /api/spec/:id [DELETE]
-func (h *Handler) DeleteAnimal(c *fiber.Ctx) error {
-	paramId, _ := strconv.Atoi(c.Params("id"))
+func (h *Handler) DeleteAnimal(c *gin.Context) {
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.Animal.Delete(paramId)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
 
 // UpdateAnimal @Router /api/spec/:id [PUT]
-func (h *Handler) UpdateAnimal(c *fiber.Ctx) error {
+func (h *Handler) UpdateAnimal(c *gin.Context) {
 	var JSONinput models.Animal
 
-	if err := c.BodyParser(&JSONinput); err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
 	}
 
-	paramId, _ := strconv.Atoi(c.Params("id"))
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.Animal.Update(paramId, JSONinput)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }

@@ -1,19 +1,43 @@
 package handler
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
+	"net/http"
 	"petcard/pkg/models"
 )
 
-func (h *Handler) SignIn(c *fiber.Ctx) error {
-	return nil
+type SignInInput struct {
+	Username string `json:"username" gorm:"unique"`
+	Password string `json:"password"`
 }
 
-func (h *Handler) SignUp(c *fiber.Ctx) error {
+func (h *Handler) SignIn(c *gin.Context) {
+	var JSONinput SignInInput
+
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
+	}
+
+	token, err := h.services.Authorization.GenerateToken(JSONinput.Username, JSONinput.Password)
+	if err != nil {
+		newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	if token == "" {
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"token": token,
+	})
+}
+
+func (h *Handler) SignUp(c *gin.Context) {
 	var JSONinput models.User
 
-	if err := c.BodyParser(&JSONinput); err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
 	}
 
 	data, err := h.services.Authorization.SignUp(JSONinput)
@@ -21,8 +45,7 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 		newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }

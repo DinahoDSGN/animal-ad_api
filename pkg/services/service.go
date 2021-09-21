@@ -8,6 +8,8 @@ import (
 type Authorization interface {
 	SignIn(data models2.User) (models2.User, error)
 	SignUp(data models2.User) (models2.User, error)
+	GenerateToken(username string, password string) (string, error)
+	ParseToken(token string) (uint, error)
 }
 
 type Ad interface {

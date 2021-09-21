@@ -30,3 +30,15 @@ func (database *AuthorizationRepo) SignUp(data models.User) (models.User, error)
 
 	return user, nil
 }
+
+func (database *AuthorizationRepo) GetUser(username string, password string) (models.User, error) {
+	var data models.User
+
+	err := database.db.Raw("SELECT * FROM users WHERE username = ? AND password = ?", username, password).Find(&data)
+
+	if data.Id == 0 {
+		return data, err.Error
+	}
+
+	return data, nil
+}

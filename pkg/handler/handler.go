@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"petcard/pkg/services"
 )
 
@@ -13,47 +13,53 @@ func NewHandler(services *services.Service) *Handler {
 	return &Handler{services: services}
 }
 
-func (h *Handler) InitRoutes(app *fiber.App) {
-	app.Post("/api/signup", h.SignUp)
-	app.Post("/api/signin", h.SignIn)
+func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
+	router := r
 
-	api := app.Group("/api")
+	auth := router.Group("/auth")
+	{
+		auth.POST("/signup", h.SignUp)
+		auth.POST("/signin", h.SignIn)
+	}
 
-	user := api.Group("/user")
-	ad := api.Group("/ad")
-	spec := api.Group("/animal")
-	parser := api.Group("/parser")
-	breed := api.Group("/breed")
+	api := router.Group("/api/", h.UserIdentity)
+	{
+		user := api.Group("/user")
+		{
+			user.GET("/", h.GetAllUsers)
+			user.GET("/:id", h.GetUserById)
+			user.DELETE("/:id", h.DeleteUser)
+			user.PUT("/:id", h.UpdateUser)
+		}
+		ad := api.Group("/ad")
+		{
+			ad.POST("/create", h.CreateAd)
+			ad.GET("/", h.GetAllAds)
+			ad.GET("/:id", h.GetAdById)
+			ad.DELETE("/:id", h.DeleteAd)
+			ad.PUT("/:id", h.UpdateAd)
+		}
+		spec := api.Group("/animal")
+		{
+			spec.POST("/create", h.CreateAnimal)
+			spec.GET("/", h.GetAllAnimals)
+			spec.GET("/:id", h.GetAnimalById)
+			spec.DELETE("/:id", h.DeleteAnimal)
+			spec.PUT("/:id", h.UpdateAnimal)
+		}
+		parser := api.Group("/parser")
+		{
+			parser.POST("/push", h.Push)
+		}
+		breed := api.Group("/breed")
+		{
+			breed.POST("/create", h.CreateBreed)
+			breed.GET("/", h.GetAllBreeds)
+			breed.GET("/:id", h.GetBreedById)
+			breed.DELETE("/:id", h.DeleteBreed)
+			breed.PUT("/:id", h.UpdateBreed)
+		}
+	}
 
-	// user endpoints
-	user.Get("/", h.GetAllUsers)
-	user.Get("/:id", h.GetUserById)
-	user.Delete("/:id", h.DeleteUser)
-	user.Put("/:id", h.UpdateUser)
-
-	// ad endpoints
-	ad.Post("/create", h.CreateAd)
-	ad.Get("/", h.GetAllAds)
-	ad.Get("/:id", h.GetAdById)
-	ad.Delete("/:id", h.DeleteAd)
-	ad.Put("/:id", h.UpdateAd)
-
-	// animal endpoints
-	spec.Post("/create", h.CreateAnimal)
-	spec.Get("/", h.GetAllAnimals)
-	spec.Get("/:id", h.GetAnimalById)
-	spec.Delete("/:id", h.DeleteAnimal)
-	spec.Put("/:id", h.UpdateAnimal)
-
-	// breed endpoints
-	breed.Post("/create", h.CreateBreed)
-	breed.Get("/", h.GetAllBreeds)
-	breed.Get("/:id", h.GetBreedById)
-	breed.Delete("/:id", h.DeleteBreed)
-	breed.Put("/:id", h.UpdateBreed)
-
-	ad.Get("/sort/by=:by", h.SortBy)
-	ad.Get("/sort/by=:by", h.SortBy)
-
-	parser.Post("/push", h.Push)
+	return router
 }

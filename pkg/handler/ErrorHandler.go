@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,10 +13,8 @@ type StatusResponse struct {
 	Status string `json:"status"`
 }
 
-func newErrorResponse(c *fiber.Ctx, status int, message string) error {
+func newErrorResponse(c *gin.Context, status int, message string) error {
 	logrus.Error(message)
-	return c.JSON(fiber.Map{
-		"status":  status,
-		"message": message,
-	})
+	c.AbortWithStatusJSON(status, ErrorResponse{message})
+	return nil
 }

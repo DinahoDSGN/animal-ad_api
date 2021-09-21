@@ -1,12 +1,15 @@
 package handler
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
 // Push @Router /api/parser/push [POST]
-func (h *Handler) Push(c *fiber.Ctx) error {
+func (h *Handler) Push(c *gin.Context) {
 	data := h.services.Parser.Push()
 
-	return c.JSON(fiber.Map{
+	c.JSON(http.StatusOK, map[string]interface{}{
 		"data": data,
 	})
 }

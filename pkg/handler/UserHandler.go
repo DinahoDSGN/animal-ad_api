@@ -1,91 +1,99 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
+	"net/http"
 	"petcard/pkg/models"
 	"strconv"
 )
 
 // GetAllUsers @Router /api/user/ [GET]
-func (h *Handler) GetAllUsers(c *fiber.Ctx) error {
+func (h *Handler) GetAllUsers(c *gin.Context) {
 	data, err := h.services.User.GetAll()
 	if err != nil {
-		return err
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
-	return c.JSON(fiber.Map{
+	c.JSON(http.StatusOK, map[string]interface{}{
 		"data": data,
 	})
 }
 
 // GetUserById @Router /api/user/:id [GET]
-func (h *Handler) GetUserById(c *fiber.Ctx) error {
-	paramId, _ := strconv.Atoi(c.Params("id"))
+func (h *Handler) GetUserById(c *gin.Context) {
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		newErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.User.GetList(paramId)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		newErrorResponse(c, http.StatusInternalServerError, "user not found")
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
 
 // UpdateUser @Router /api/user/:id [PUT]
-func (h *Handler) UpdateUser(c *fiber.Ctx) error {
+func (h *Handler) UpdateUser(c *gin.Context) {
 	JSONinput := models.User{}
 
-	if err := c.BodyParser(&JSONinput); err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
 	}
 
-	paramId, _ := strconv.Atoi(c.Params("id"))
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		newErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.User.Update(paramId, JSONinput)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusInternalServerError, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
 
 // DeleteUser @Router /api/user/:id [DELETE]
-func (h *Handler) DeleteUser(c *fiber.Ctx) error {
-	paramId, _ := strconv.Atoi(c.Params("id"))
+func (h *Handler) DeleteUser(c *gin.Context) {
+	paramId, _ := strconv.Atoi(c.Param("id"))
 	if paramId <= 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "invalid id")
+		newErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
 	}
 
 	data, err := h.services.User.Delete(paramId)
 	if err != nil {
-		return newErrorResponse(c, fiber.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	if data.Id == 0 {
-		return newErrorResponse(c, fiber.StatusBadRequest, "record not found")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	return c.JSON(fiber.Map{
-		"status": fiber.StatusOK,
-		"data":   data,
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
 	})
 }
