@@ -21,5 +21,5 @@ func main() {
 
 	handlers.InitRoutes(app)
 
-	app.Run()
+	app.Run(":8081")
 }
