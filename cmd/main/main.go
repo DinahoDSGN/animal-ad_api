@@ -6,6 +6,7 @@ import (
 	"petcard/pkg/handler"
 	"petcard/pkg/repository"
 	"petcard/pkg/services"
+	"petcard/telegram"
 )
 
 func main() {
@@ -21,5 +22,9 @@ func main() {
 
 	handlers.InitRoutes(app)
 
-	app.Run(":8081")
+	telegramBot := telegram.NewTelegram(database.Connect(), services)
+	telegramBot.InitBot()
+
+	go app.Run(":8080")
+
 }
