@@ -6,11 +6,12 @@ import (
 	"petcard/pkg/handler"
 	"petcard/pkg/repository"
 	"petcard/pkg/services"
+	"petcard/telegram"
 )
 
 func main() {
 	app := gin.Default()
-
+	go app.Run(":8081")
 	app.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
@@ -21,5 +22,7 @@ func main() {
 
 	handlers.InitRoutes(app)
 
-	app.Run()
+	telegramBot := telegram.NewTelegram(database.Connect(), services)
+	telegramBot.InitBot()
+
 }
