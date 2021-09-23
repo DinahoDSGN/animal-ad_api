@@ -11,7 +11,7 @@ import (
 
 func main() {
 	app := gin.Default()
-
+	go app.Run(":8081")
 	app.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
@@ -24,7 +24,5 @@ func main() {
 
 	telegramBot := telegram.NewTelegram(database.Connect(), services)
 	telegramBot.InitBot()
-
-	go app.Run(":8080")
 
 }

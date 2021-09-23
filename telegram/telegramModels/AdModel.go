@@ -1,12 +1,14 @@
 package telegramModels
 
-type Ad struct {
+type Ad []struct {
 	AdID        int    `json:"ad_id"`
 	Title       string `json:"title"`
 	Location    string `json:"location"`
 	Description string `json:"description"`
-	Animal      Animal `json:"animal"`
-	Author      Author `json:"author"`
+	AnimalID    int    `json:"animal_id"`
+	Animal      Animal `json:"Animal"`
+	AuthorID    int    `json:"author_id"`
+	Author      Author `json:"Author"`
 }
 type Breed struct {
 	ID          int         `json:"id"`
@@ -14,7 +16,7 @@ type Breed struct {
 	Type        string      `json:"type"`
 	Wool        string      `json:"wool"`
 	GlobalPrice int         `json:"global_price"`
-	Animal      interface{} `json:"animal"`
+	Animal      interface{} `json:"Animal"`
 }
 type Animal struct {
 	SpecID     int    `json:"spec_id"`
@@ -25,7 +27,8 @@ type Animal struct {
 	Vaccinated bool   `json:"vaccinated"`
 	Spayed     bool   `json:"spayed"`
 	Passport   bool   `json:"passport"`
-	Breed      Breed  `json:"breed"`
+	BreedID    int    `json:"breed_id"`
+	Breed      Breed  `json:"Breed"`
 	Price      int    `json:"price"`
 	Profit     int    `json:"profit"`
 }

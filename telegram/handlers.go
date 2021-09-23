@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"io/ioutil"
 	"petcard/telegram/telegramModels"
 	"strconv"
 )
@@ -23,7 +22,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) {
 		b.bot.Send(msg)
 		return
 	case "ad_get_ad":
-		msgBody, _ := b.adGetAd(message.CommandArguments())
+		a := message.Text
+		msgBody, _ := b.adGetAd(a)
 		b.sendMessage(message.Chat.ID, msgBody)
 		return
 	case "ad_get_all":
@@ -46,25 +46,56 @@ func (b *Bot) adGetAd(id string) (string, error) {
 
 	record, _ := b.service.Ad.GetList(adId)
 
-	msgTemplate := fmt.Sprintf("Ad id: %d \n Title: %s \n Description: %s \n Location: %s \n",
-		record.Id, record.Title, record.Description, record.Location)
+	msgTemplate := fmt.Sprintf(""+
+		"Id: %v\n"+
+		"Description: %s\n"+
+		"Location: %s\n"+
+		"Animal Name: %v\n"+
+		"Animal Type: %s\n"+
+		"Animal Breed Name: %s\n"+
+		"Animal Price: %v\n"+
+		"Animal Profit: %v\n\n",
+		record.Id,
+		record.Description,
+		record.Location,
+		record.Animal.Name,
+		record.Animal.Type,
+		record.Animal.Breed.Name,
+		record.Animal.Price,
+		record.Animal.Profit)
 
 	return msgTemplate, nil
 }
 
-// TODO: JSON TO STRUCT?
 func (b *Bot) adGetAll() (string, error) {
 	record, _ := b.service.Ad.GetAll()
 	bytes, _ := json.Marshal(record)
 
-	a, _ := ioutil.ReadFile(string(bytes))
 	var ad telegramModels.Ad
+	json.Unmarshal(bytes, &ad)
 
-	json.Unmarshal(a, &ad)
+	var messageTemplate string
+	for i := 0; i < len(ad); i++ {
+		messageTemplate = messageTemplate + fmt.Sprintf(
+			"Id: %v\n"+
+				"Description: %s\n"+
+				"Location: %s\n"+
+				"Animal Name: %v\n"+
+				"Animal Type: %s\n"+
+				"Animal Breed Name: %s\n"+
+				"Animal Price: %v\n"+
+				"Animal Profit: %v\n\n",
+			ad[i].AdID,
+			ad[i].Description,
+			ad[i].Location,
+			ad[i].Animal.Name,
+			ad[i].Animal.Type,
+			ad[i].Animal.Breed.Name,
+			ad[i].Animal.Price,
+			ad[i].Animal.Profit)
+	}
 
-	msgTemplate := fmt.Sprintf("data: %v", string(bytes))
-
-	fmt.Println(ad)
+	msgTemplate := fmt.Sprintf("%v", messageTemplate)
 
 	return msgTemplate, nil
 }

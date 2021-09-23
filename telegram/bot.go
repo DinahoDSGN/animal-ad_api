@@ -27,6 +27,13 @@ func (b *Bot) Start() error {
 	return nil
 }
 
+var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
+	tgbotapi.NewInlineKeyboardRow(
+		tgbotapi.NewInlineKeyboardButtonData("Get ad", "/ad_get_ad 6"),
+		tgbotapi.NewInlineKeyboardButtonData("All data", "/ad_get_all"),
+	),
+)
+
 func (b *Bot) handleUpdates(updates tgbotapi.UpdatesChannel) {
 	for update := range updates {
 		if update.Message == nil { // ignore any non-Message Updates
