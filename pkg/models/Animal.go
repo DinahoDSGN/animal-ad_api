@@ -6,7 +6,7 @@ import (
 )
 
 type Animal struct { // Animal struct
-	Id         uint   `json:"spec_id"`
+	Id         uint   `json:"animal_id"`
 	Name       string `json:"name"`
 	Type       string `json:"type"`
 	Color      string `json:"color"`

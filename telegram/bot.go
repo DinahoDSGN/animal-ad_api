@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"petcard/pkg/services"
@@ -44,6 +45,8 @@ func (b *Bot) handleUpdates(updates tgbotapi.UpdatesChannel) {
 			b.handleCommand(update.Message)
 			continue
 		}
+
+		fmt.Println(update.Message.Chat.UserName)
 
 		b.handleMessage(update.Message)
 	}
