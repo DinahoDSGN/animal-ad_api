@@ -20,10 +20,6 @@ func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error
 		data = append(data, asd[i])
 	}
 
-	inputFirstname := contact.Chat.FirstName
-	inputLastname := contact.Chat.LastName
-	inputUsername := contact.Chat.UserName
-
 	inputGender, _ := strconv.ParseBool(data[5])
 	inputVaccinated, _ := strconv.ParseBool(data[6])
 	inputSpayed, _ := strconv.ParseBool(data[7])
@@ -31,10 +27,10 @@ func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error
 	inputGlobalPrice, _ := strconv.Atoi(data[12])
 	inputPrice, _ := strconv.Atoi(data[13])
 
-	var input = models.Ad{
-		Title:       data[0],
-		Location:    data[1],
-		Description: data[15],
+	input := models.Ad{
+		Title:    data[0],
+		Location: data[1],
+		//Description: data[14],
 		Animal: &models.Animal{
 			Name:       data[2],
 			Type:       data[3],
@@ -52,14 +48,17 @@ func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error
 			Price: int16(inputPrice),
 		},
 		Author: &models.User{
-			Name:     inputFirstname,
-			Lastname: inputLastname,
-			Username: inputUsername,
-			Email:    data[14],
+			Id:       uint(contact.Chat.ID),
+			Name:     contact.Chat.FirstName,
+			Lastname: contact.Chat.LastName + " -",
+			Username: contact.Chat.UserName,
 		},
 	}
 
-	record, _ := b.service.Ad.Create(input)
+	record, err := b.service.Ad.Create(input)
+	if err != nil {
+		return "", err
+	}
 
 	fmt.Println(record.Animal.Breed.Name)
 
@@ -76,17 +75,17 @@ func (b *Bot) adGetAd(id string) (string, error) {
 	}
 
 	msgTemplate := fmt.Sprintf(
-		"*ID:* _%v_\n"+
-			"*Username* _%v_\n"+
-			"*Location:* _%v_\n"+
-			"*Animal Name:* _%v_\n"+
-			"*Animal Type:* _%v_\n"+
-			"*Animal Breed:* _%v_\n"+
-			"*Animal Price:* _%v_\n"+
-			"*Animal Profit:* _%v_\n"+
-			"*Description:* _%v_\n"+
-			"*Owner:* %v _%v_\n"+
-			"*Owners email:* _%v_\n\n",
+		"ID: %v\n"+
+			"Username %v\n"+
+			"Location: %v\n"+
+			"Animal Name: %v\n"+
+			"Animal Type: %v\n"+
+			"Animal Breed: %v\n"+
+			"Animal Price: %v\n"+
+			"Animal Profit: %v\n"+
+			"Description: %v\n"+
+			"Owner: %v %v\n"+
+			"Owners email: %v\n\n",
 		record.Id,
 		record.Author.Username,
 		record.Location,

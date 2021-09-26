@@ -13,8 +13,10 @@ func (b *Bot) handleMessage(message *tgbotapi.Message) {
 
 func (b *Bot) handleCommand(message *tgbotapi.Message) {
 	switch message.Command() {
-	case "start":
-		msg := tgbotapi.NewMessage(message.Chat.ID, "you typed start command")
+	case "help":
+		msg := tgbotapi.NewMessage(message.Chat.ID, "/ad_get_ad [id] --- get single ad information\n"+
+			"/ad_get_all --- get all ads\n"+
+			"/ad_create --- create an ad")
 		b.bot.Send(msg)
 		return
 	case "ad_get_ad":
