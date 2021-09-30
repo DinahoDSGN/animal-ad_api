@@ -44,7 +44,7 @@ func (s *AuthorizationService) GenerateToken(username string, password string) (
 	}
 
 	if data.Id == 0 {
-		return "cannot generate a token", err
+		return "", err
 	}
 
 	UserId = int(data.Id)
