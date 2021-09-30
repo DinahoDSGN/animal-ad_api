@@ -3,7 +3,6 @@ package telegram
 import (
 	"encoding/json"
 	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"petcard/pkg/models"
 	"petcard/pkg/services"
 	"petcard/telegram/telegramModels"
@@ -11,8 +10,7 @@ import (
 	"strings"
 )
 
-// TODO: AUTHOR ID...
-func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, bool, error) {
+func (b *Bot) adCreate(message string) (string, bool, error) {
 	asd := strings.Split(message, "\n")
 
 	if message == "" {
@@ -75,7 +73,10 @@ func (b *Bot) getMyAds() (string, error) {
 	bytes, _ := json.Marshal(record)
 
 	var ad telegramModels.Ad
-	json.Unmarshal(bytes, &ad)
+	err := json.Unmarshal(bytes, &ad)
+	if err != nil {
+		return "", err
+	}
 
 	var messageTemplate string
 	for i := 0; i < len(ad); i++ {
@@ -149,7 +150,10 @@ func (b *Bot) adGetAll() (string, error) {
 	bytes, _ := json.Marshal(record)
 
 	var ad telegramModels.Ad
-	json.Unmarshal(bytes, &ad)
+	err := json.Unmarshal(bytes, &ad)
+	if err != nil {
+		return "", err
+	}
 
 	var messageTemplate string
 	for i := 0; i < len(ad); i++ {
