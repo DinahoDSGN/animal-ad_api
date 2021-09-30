@@ -2,6 +2,7 @@ package migrations
 
 import (
 	"gorm.io/gorm"
+	"log"
 	"petcard/pkg/models"
 )
 
@@ -20,6 +21,8 @@ func Migrate(connection *gorm.DB) error {
 	if err != nil {
 		return err
 	}
+
+	log.Println("Migrations finished")
 
 	return nil
 }

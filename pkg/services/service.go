@@ -10,11 +10,13 @@ type Authorization interface {
 	SignUp(data models2.User) (models2.User, error)
 	GenerateToken(username string, password string) (string, error)
 	ParseToken(token string) (uint, error)
+	GetUserId() int
 }
 
 type Ad interface {
 	Create(data models2.Ad) (models2.Ad, error)
 	GetAll() ([]models2.Ad, error)
+	GetMyAds(id int) ([]models2.Ad, error)
 	GetList(id int) (models2.Ad, error)
 	Delete(id int) (models2.Ad, error)
 	Update(id int, data models2.Ad) (models2.Ad, error)

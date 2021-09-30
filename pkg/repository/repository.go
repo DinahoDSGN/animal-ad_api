@@ -14,6 +14,7 @@ type Authorization interface {
 type Ad interface {
 	Create(data models.Ad) (models.Ad, error)
 	GetAll() ([]models.Ad, error)
+	GetMyAds(id int) ([]models.Ad, error)
 	GetList(id int) (models.Ad, error)
 	Delete(id int) (models.Ad, error)
 	Update(id int, data models.Ad) (models.Ad, error)

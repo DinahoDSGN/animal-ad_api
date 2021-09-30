@@ -13,6 +13,8 @@ import (
 const salt = "jglkdabgfa987r89sahdnlkn"
 const signingKey = "gpldmzlkfgh87809"
 
+var UserId = 0
+
 type AuthorizationService struct {
 	repo repository.Authorization
 }
@@ -37,14 +39,15 @@ func (s *AuthorizationService) SignUp(data models2.User) (models2.User, error) {
 
 func (s *AuthorizationService) GenerateToken(username string, password string) (string, error) {
 	data, err := s.repo.GetUser(username, generatePasswordHash(password))
-	fmt.Println(data)
 	if err != nil {
-		return "", err
+		return "wtf man?", err
 	}
 
 	if data.Id == 0 {
-		return "", err
+		return "cannot generate a token", err
 	}
+
+	UserId = int(data.Id)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.StandardClaims{
@@ -55,6 +58,10 @@ func (s *AuthorizationService) GenerateToken(username string, password string) (
 	})
 
 	return token.SignedString([]byte(signingKey))
+}
+
+func (s *AuthorizationService) GetUserId() int {
+	return UserId
 }
 
 func (s *AuthorizationService) ParseToken(accessToken string) (uint, error) {

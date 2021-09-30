@@ -48,6 +48,6 @@ func (b *Bot) handleUpdates(updates tgbotapi.UpdatesChannel) {
 
 		fmt.Println(update.Message.Chat.UserName)
 
-		b.handleMessage(update.Message)
+		//b.handleMessage(update.Message)
 	}
 }

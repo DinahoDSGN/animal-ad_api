@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"petcard/pkg/models"
 )
@@ -36,6 +37,15 @@ func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 func (database *AdRepo) GetAll() ([]models.Ad, error) {
 	var records []models.Ad
 	database.db.Preload("Author").Preload("Animal.Breed").Find(&records)
+
+	return records, nil
+}
+
+func (database *AdRepo) GetMyAds(id int) ([]models.Ad, error) {
+	var records []models.Ad
+	database.db.Preload("Author").Preload("Animal.Breed").Where("author_id = ?", id).Find(&records)
+
+	fmt.Println(records)
 
 	return records, nil
 }

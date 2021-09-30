@@ -5,14 +5,19 @@ import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"petcard/pkg/models"
+	"petcard/pkg/services"
 	"petcard/telegram/telegramModels"
 	"strconv"
 	"strings"
 )
 
 // TODO: AUTHOR ID...
-func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error) {
+func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, bool, error) {
 	asd := strings.Split(message, "\n")
+
+	if message == "" {
+		return "Empty arguments", false, nil
+	}
 
 	var data []string
 
@@ -26,6 +31,7 @@ func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error
 	inputPassport, _ := strconv.ParseBool(data[8])
 	inputGlobalPrice, _ := strconv.Atoi(data[12])
 	inputPrice, _ := strconv.Atoi(data[13])
+	userId := b.service.Authorization.GetUserId()
 
 	input := models.Ad{
 		Title:    data[0],
@@ -47,22 +53,58 @@ func (b *Bot) adCreate(message string, contact *tgbotapi.Message) (string, error
 			},
 			Price: int16(inputPrice),
 		},
-		Author: &models.User{
-			Id:       uint(contact.Chat.ID),
-			Name:     contact.Chat.FirstName,
-			Lastname: contact.Chat.LastName + " -",
-			Username: contact.Chat.UserName,
-		},
+		AuthorId: uint(userId),
 	}
 
 	record, err := b.service.Ad.Create(input)
 	if err != nil {
-		return "", err
+		return "", false, err
 	}
 
-	fmt.Println(record.Animal.Breed.Name)
+	fmt.Println(record.AuthorId)
 
-	return data[0], nil
+	msg := "Ad " + record.Title + " successfully created!"
+
+	return msg, true, nil
+}
+
+func (b *Bot) getMyAds() (string, error) {
+	userId := services.UserId
+
+	record, _ := b.service.Ad.GetMyAds(userId)
+	bytes, _ := json.Marshal(record)
+
+	var ad telegramModels.Ad
+	json.Unmarshal(bytes, &ad)
+
+	var messageTemplate string
+	for i := 0; i < len(ad); i++ {
+		messageTemplate = messageTemplate + fmt.Sprintf(
+			"*ID:* _%v_\n"+
+				"*Location:* _%v_\n"+
+				"*Animal Name:* _%v_\n"+
+				"*Animal Type:* _%v_\n"+
+				"*Animal Breed:* _%v_\n"+
+				"*Animal Price:* _%v_\n"+
+				"*Animal Profit:* _%v_\n"+
+				"*Description:* _%v_\n"+
+				"*Owner:* %v\n"+
+				"*Owners email:* _%v_\n\n",
+			ad[i].AdID,
+			ad[i].Location,
+			ad[i].Animal.Name,
+			ad[i].Animal.Type,
+			ad[i].Animal.Breed.Name,
+			ad[i].Animal.Price,
+			ad[i].Animal.Profit,
+			ad[i].Description,
+			ad[i].Author.Username,
+			ad[i].Author.Email)
+	}
+
+	msgTemplate := fmt.Sprintf("%v", messageTemplate)
+
+	return msgTemplate, nil
 }
 
 func (b *Bot) adGetAd(id string) (string, error) {
@@ -113,7 +155,6 @@ func (b *Bot) adGetAll() (string, error) {
 	for i := 0; i < len(ad); i++ {
 		messageTemplate = messageTemplate + fmt.Sprintf(
 			"*ID:* _%v_\n"+
-				"*Username* _%v_\n"+
 				"*Location:* _%v_\n"+
 				"*Animal Name:* _%v_\n"+
 				"*Animal Type:* _%v_\n"+
@@ -121,10 +162,9 @@ func (b *Bot) adGetAll() (string, error) {
 				"*Animal Price:* _%v_\n"+
 				"*Animal Profit:* _%v_\n"+
 				"*Description:* _%v_\n"+
-				"*Owner:* %v _%v_\n"+
+				"*Owner:* %v\n"+
 				"*Owners email:* _%v_\n\n",
 			ad[i].AdID,
-			ad[i].Author.Username,
 			ad[i].Location,
 			ad[i].Animal.Name,
 			ad[i].Animal.Type,
@@ -132,8 +172,7 @@ func (b *Bot) adGetAll() (string, error) {
 			ad[i].Animal.Price,
 			ad[i].Animal.Profit,
 			ad[i].Description,
-			ad[i].Author.Name,
-			ad[i].Author.Lastname,
+			ad[i].Author.Username,
 			ad[i].Author.Email)
 	}
 
