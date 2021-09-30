@@ -19,10 +19,7 @@ func (database *AuthorizationRepo) SignIn(data models.User) (models.User, error)
 
 func (database *AuthorizationRepo) SignUp(data models.User) (models.User, error) {
 	user := models.User{
-		Name:     data.Name,
-		Lastname: data.Lastname,
 		Username: data.Username,
-		Email:    data.Email,
 		Password: data.Password,
 	}
 

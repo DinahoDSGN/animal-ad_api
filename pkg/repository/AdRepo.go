@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"petcard/pkg/models"
 )
@@ -19,14 +20,16 @@ func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 		Location:    data.Location,
 		Description: data.Description,
 		AnimalId:    data.AnimalId,
+		Animal:      data.Animal,
 		AuthorId:    data.AuthorId,
+		Author:      data.Author,
 	}
 
 	ad.Location = NewLocationData(ad.Location)
 
 	database.db.Create(&ad)
 
-	database.db.Preload("Animal.Breed").Preload("Animal").Table("ads").Find(&ad)
+	database.db.Preload("Author").Preload("Animal.Breed").Table("ads").Find(&ad)
 
 	return ad, nil
 }
@@ -38,9 +41,20 @@ func (database *AdRepo) GetAll() ([]models.Ad, error) {
 	return records, nil
 }
 
+func (database *AdRepo) GetMyAds(id int) ([]models.Ad, error) {
+	var records []models.Ad
+	database.db.Preload("Author").Preload("Animal.Breed").Where("author_id = ?", id).Find(&records)
+
+	fmt.Println(records)
+
+	return records, nil
+}
+
 func (database *AdRepo) GetList(id int) (models.Ad, error) {
 	var data models.Ad
+	//database.db.Raw("SELECT * FROM `ads` JOIN animals ON animals.id = ads.animal_id JOIN breeds ON animals.breed_id = breeds.id").Find(&data)
 	database.db.Preload("Author").Preload("Animal.Breed").Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
+	//database.db.Preload(clause.Associations).Raw("SELECT * FROM ads WHERE id = ?", id).First(&data)
 
 	return data, nil
 }

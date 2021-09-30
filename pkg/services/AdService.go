@@ -21,6 +21,10 @@ func (s *AdService) GetAll() ([]models.Ad, error) {
 	return s.repo.GetAll()
 }
 
+func (s *AdService) GetMyAds(id int) ([]models.Ad, error) {
+	return s.repo.GetMyAds(id)
+}
+
 func (s *AdService) GetList(id int) (models.Ad, error) {
 	return s.repo.GetList(id)
 }
