@@ -66,7 +66,7 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) {
 		}
 
 		a := message.CommandArguments()
-		msgBody, ok, _ := b.adCreate(a, message)
+		msgBody, ok, _ := b.adCreate(a)
 		if !ok {
 			msg := tgbotapi.NewMessage(message.Chat.ID, "Argument template: "+
 				"\nTitle\nLocation\nAnimal Name\nAnimal Type\nAnimal Color\nGender\nVaccinated\nSpayed\nPassport\nBreed Name\nBreed Type\nWool\nGlobal Price\nPrice")

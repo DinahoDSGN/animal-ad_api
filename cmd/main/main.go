@@ -1,20 +1,22 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"petcard/pkg/database"
 	"petcard/pkg/handler"
 	"petcard/pkg/repository"
 	"petcard/pkg/services"
-	"petcard/telegram"
 )
 
 func main() {
 	app := gin.Default()
-	go app.Run(":8081")
+	defer app.Run()
 	app.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
+
+	app.Use(cors.Default())
 
 	repos := repository.NewRepository(database.Connect())
 	services := services.NewService(repos)
@@ -22,7 +24,7 @@ func main() {
 
 	handlers.InitRoutes(app)
 
-	telegramBot := telegram.NewTelegram(database.Connect(), services)
-	telegramBot.InitBot()
+	//telegramBot := telegram.NewTelegram(database.Connect(), services)
+	//telegramBot.InitBot()
 
 }
