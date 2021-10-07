@@ -20,6 +20,23 @@ func (h *Handler) GetAllUsers(c *gin.Context) {
 	})
 }
 
+func (h *Handler) GetUser(c *gin.Context) {
+	data, err := h.services.User.GetList(h.services.GetUserId())
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if data.Id == 0 {
+		newErrorResponse(c, http.StatusInternalServerError, "not authorized")
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data,
+	})
+}
+
 // GetUserById @Router /api/user/:id [GET]
 func (h *Handler) GetUserById(c *gin.Context) {
 	paramId, _ := strconv.Atoi(c.Param("id"))

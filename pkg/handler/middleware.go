@@ -4,13 +4,14 @@ import (
 	_ "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"net/http"
 	"strings"
 )
 
 const userCtx = "userId"
 
-func CORSMiddleware() gin.HandlerFunc {
+func (h *Handler) CORSMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -21,6 +22,7 @@ func CORSMiddleware() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
+		log.Println("CORS initialized")
 
 		c.Next()
 	}

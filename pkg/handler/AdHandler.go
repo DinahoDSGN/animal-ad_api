@@ -31,6 +31,7 @@ func (h *Handler) CreateAd(c *gin.Context) {
 func (h *Handler) GetAllAds(c *gin.Context) {
 	data, err := h.services.Ad.GetAll()
 	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 

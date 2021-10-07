@@ -11,12 +11,21 @@ import (
 
 func main() {
 	app := gin.Default()
+	app.Use(cors.Default())
 	defer app.Run()
 	app.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
-	app.Use(cors.Default())
+	//app.Use(cors.New(cors.Config{
+	//	AllowAllOrigins:        true,
+	//	AllowOrigins:           []string{"localhost:3000/"},
+	//	AllowMethods:           []string{"PUT", "PATCH"},
+	//	AllowHeaders:           []string{"Origin"},
+	//	AllowCredentials:       true,
+	//	ExposeHeaders:          []string{"Content-Length"},
+	//	MaxAge:                 12 * time.Hour,
+	//}))
 
 	repos := repository.NewRepository(database.Connect())
 	services := services.NewService(repos)
