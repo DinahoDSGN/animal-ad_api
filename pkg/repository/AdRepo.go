@@ -52,9 +52,7 @@ func (database *AdRepo) GetMyAds(id int) ([]models.Ad, error) {
 
 func (database *AdRepo) GetList(id int) (models.Ad, error) {
 	var data models.Ad
-	//database.db.Raw("SELECT * FROM `ads` JOIN animals ON animals.id = ads.animal_id JOIN breeds ON animals.breed_id = breeds.id").Find(&data)
 	database.db.Preload("Author").Preload("Animal.Breed").Raw("SELECT * FROM ads WHERE id = ?", id).Find(&data)
-	//database.db.Preload(clause.Associations).Raw("SELECT * FROM ads WHERE id = ?", id).First(&data)
 
 	return data, nil
 }

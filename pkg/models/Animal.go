@@ -15,7 +15,7 @@ type Animal struct { // Animal struct
 	Spayed     bool   `json:"spayed" gorm:"type:bool"`
 	Passport   bool   `json:"passport" gorm:"type:bool"`
 	BreedId    uint   `json:"breed_id"`
-	Breed      *Breed `gorm:"foreignKey:BreedId"`
+	Breed      *Breed `json:"breed" gorm:"foreignKey:BreedId"`
 	Price      int16  `json:"price"`
 	Profit     int16  `json:"profit"`
 }

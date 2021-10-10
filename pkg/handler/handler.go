@@ -39,6 +39,8 @@ func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 			ad.GET("/:id", h.GetAdById)
 			ad.DELETE("/:id", h.DeleteAd)
 			ad.PUT("/:id", h.UpdateAd)
+			//sort section
+			ad.GET("/sort", h.SortAdBy)
 		}
 		spec := api.Group("/animal")
 		{

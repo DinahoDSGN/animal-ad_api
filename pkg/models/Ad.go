@@ -6,7 +6,7 @@ type Ad struct {
 	Location    string  `json:"location"`
 	Description string  `json:"description"`
 	AnimalId    uint    `json:"animal_id"`
-	Animal      *Animal `gorm:"foreignKey:AnimalId"`
+	Animal      *Animal `json:"animal" gorm:"foreignKey:AnimalId"`
 	AuthorId    uint    `json:"author_id"`
-	Author      *User   `gorm:"foreignKey:AuthorId"`
+	Author      *User   `json:"author" gorm:"foreignKey:AuthorId"`
 }

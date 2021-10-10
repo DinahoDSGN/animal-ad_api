@@ -22,6 +22,10 @@ type Ad interface {
 	Update(id int, data models2.Ad) (models2.Ad, error)
 }
 
+type AdSorts interface {
+	SortBy(values map[string]interface{}) ([]models2.Ad, error)
+}
+
 type User interface {
 	GetAll() ([]models2.User, error)
 	GetList(id int) (models2.User, error)
@@ -53,6 +57,7 @@ type Service struct {
 	Authorization
 	User
 	Ad
+	AdSorts
 	Animal
 	Breed
 	Parser
@@ -63,6 +68,7 @@ func NewService(repos *repository.Repository) *Service {
 		Authorization: NewAuthorizationService(repos.Authorization),
 		User:          NewUserService(repos.User),
 		Ad:            NewAdService(repos.Ad),
+		AdSorts:       NewAdSortsService(repos.AdSorts),
 		Animal:        NewAnimalService(repos.Animal),
 		Breed:         NewBreedService(repos.Breed),
 		Parser:        NewParserService(repos.Parser),

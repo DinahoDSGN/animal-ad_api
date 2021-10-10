@@ -20,6 +20,10 @@ type Ad interface {
 	Update(id int, data models.Ad) (models.Ad, error)
 }
 
+type AdSorts interface {
+	SortBy(values map[string]interface{}) ([]models.Ad, error)
+}
+
 type User interface {
 	GetAll() ([]models.User, error)
 	GetList(id int) (models.User, error)
@@ -51,6 +55,7 @@ type Repository struct {
 	Authorization
 	User
 	Ad
+	AdSorts
 	Animal
 	Breed
 	Parser
@@ -62,6 +67,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		Animal:        NewAnimalRepo(db),
 		User:          NewUserRepo(db),
 		Ad:            NewAdRepo(db),
+		AdSorts:       NewAdSortsRepo(db),
 		Breed:         NewBreedRepo(db),
 		Parser:        NewParserRepo(db),
 	}
