@@ -17,7 +17,7 @@ func DatabaseConfig(connection *gorm.DB) error {
 }
 
 func Migrate(connection *gorm.DB) error {
-	err := connection.AutoMigrate(&models.Ad{}, &models.Animal{}, &models.User{}, &models.Breed{})
+	err := connection.AutoMigrate(&models.Ad{}, &models.Animal{}, &models.User{}, &models.Breed{}, &models.AdLocation{})
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	ad := telegramModels.Ad{
 //		Title:       "My little Snezhka",
-//		Location:    "Esik City",
+//		AdLocation:    "Esik City",
 //		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
 //		SpecifyId:   1,
 //		UserId:      1,
@@ -126,7 +126,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	ad = telegramModels.Ad{
 //		Title:       "My little Simba",
-//		Location:    "Esik City",
+//		AdLocation:    "Esik City",
 //		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
 //		SpecifyId:   2,
 //		UserId:      2,
@@ -136,7 +136,7 @@ func Drop(connection *gorm.DB) error {
 //
 //	ad = telegramModels.Ad{
 //		Title:       "My little Asya",
-//		Location:    "Esik City",
+//		AdLocation:    "Esik City",
 //		Description: "at it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now ",
 //		SpecifyId:   3,
 //		UserId:      3,

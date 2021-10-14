@@ -31,6 +31,7 @@ func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 			user.GET("/:id", h.GetUserById)
 			user.DELETE("/:id", h.DeleteUser)
 			user.PUT("/:id", h.UpdateUser)
+			user.PUT("/rating/:id", h.UpdateRating)
 		}
 		ad := api.Group("/adv")
 		{
@@ -40,6 +41,12 @@ func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 			ad.DELETE("/:id", h.DeleteAd)
 			ad.PUT("/:id", h.UpdateAd)
 			ad.GET("/sort", h.SortAdBy)
+		}
+		adLocation := api.Group("/adv-location")
+		{
+			adLocation.POST("/create", h.CreateAdLocation)
+			adLocation.GET("/all", h.GetAllLocations)
+			adLocation.GET("/:id", h.GetLocationById)
 		}
 		spec := api.Group("/animal")
 		{

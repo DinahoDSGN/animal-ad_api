@@ -26,11 +26,18 @@ type AdSorts interface {
 	SortBy(values map[string]interface{}) ([]models2.Ad, error)
 }
 
+type AdLocation interface {
+	Create(data models2.AdLocation) (models2.AdLocation, error)
+	GetAll() ([]models2.AdLocation, error)
+	GetList(id int) (models2.AdLocation, error)
+}
+
 type User interface {
 	GetAll() ([]models2.User, error)
 	GetList(id int) (models2.User, error)
 	Delete(id int) (models2.User, error)
 	Update(id int, data models2.User) (models2.User, error)
+	UpdateRating(id int, data models2.User) (float32, error)
 }
 
 type Animal interface {
@@ -58,6 +65,7 @@ type Service struct {
 	User
 	Ad
 	AdSorts
+	AdLocation
 	Animal
 	Breed
 	Parser
@@ -69,6 +77,7 @@ func NewService(repos *repository.Repository) *Service {
 		User:          NewUserService(repos.User),
 		Ad:            NewAdService(repos.Ad),
 		AdSorts:       NewAdSortsService(repos.AdSorts),
+		AdLocation:    NewAdLocationService(repos.AdLocation),
 		Animal:        NewAnimalService(repos.Animal),
 		Breed:         NewBreedService(repos.Breed),
 		Parser:        NewParserService(repos.Parser),

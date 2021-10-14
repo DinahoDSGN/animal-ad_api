@@ -25,6 +25,10 @@ func (s *UserService) Delete(id int) (models.User, error) {
 	return s.repo.Delete(id)
 }
 
+func (s *UserService) UpdateRating(id int, data models.User) (float32, error) {
+	return s.repo.UpdateRating(id, data)
+}
+
 func (s *UserService) Update(id int, data models.User) (models.User, error) {
 	return s.repo.Update(id, data)
 }

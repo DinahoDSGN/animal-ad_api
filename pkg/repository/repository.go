@@ -24,11 +24,18 @@ type AdSorts interface {
 	SortBy(values map[string]interface{}) ([]models.Ad, error)
 }
 
+type AdLocation interface {
+	Create(data models.AdLocation) (models.AdLocation, error)
+	GetAll() ([]models.AdLocation, error)
+	GetList(id int) (models.AdLocation, error)
+}
+
 type User interface {
 	GetAll() ([]models.User, error)
 	GetList(id int) (models.User, error)
 	Delete(id int) (models.User, error)
 	Update(id int, data models.User) (models.User, error)
+	UpdateRating(id int, data models.User) (float32, error)
 }
 
 type Animal interface {
@@ -56,6 +63,7 @@ type Repository struct {
 	User
 	Ad
 	AdSorts
+	AdLocation
 	Animal
 	Breed
 	Parser
@@ -68,6 +76,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		User:          NewUserRepo(db),
 		Ad:            NewAdRepo(db),
 		AdSorts:       NewAdSortsRepo(db),
+		AdLocation:    NewAdLocationRepo(db),
 		Breed:         NewBreedRepo(db),
 		Parser:        NewParserRepo(db),
 	}

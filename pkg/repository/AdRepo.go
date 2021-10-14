@@ -16,16 +16,15 @@ func NewAdRepo(db *gorm.DB) *AdRepo {
 
 func (database *AdRepo) Create(data models.Ad) (models.Ad, error) {
 	ad := models.Ad{
-		Title:       data.Title,
-		Location:    data.Location,
-		Description: data.Description,
-		AnimalId:    data.AnimalId,
-		Animal:      data.Animal,
-		AuthorId:    data.AuthorId,
-		Author:      data.Author,
+		Title:        data.Title,
+		AdLocationId: data.AdLocationId,
+		AdLocation:   data.AdLocation,
+		Description:  data.Description,
+		AnimalId:     data.AnimalId,
+		Animal:       data.Animal,
+		AuthorId:     data.AuthorId,
+		Author:       data.Author,
 	}
-
-	ad.Location = NewLocationData(ad.Location)
 
 	database.db.Create(&ad)
 
@@ -73,11 +72,12 @@ func (database *AdRepo) Delete(id int) (models.Ad, error) {
 
 func (database *AdRepo) Update(id int, data models.Ad) (models.Ad, error) {
 	ad := models.Ad{
-		Title:       data.Title,
-		Location:    data.Location,
-		Description: data.Description,
-		AnimalId:    data.AnimalId,
-		AuthorId:    data.AuthorId,
+		Title:        data.Title,
+		AdLocationId: data.AdLocationId,
+		AdLocation:   data.AdLocation,
+		Description:  data.Description,
+		AnimalId:     data.AnimalId,
+		AuthorId:     data.AuthorId,
 	}
 
 	database.db.Model(&ad).Where("id = ?", id).Updates(&ad).Find(&ad)

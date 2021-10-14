@@ -56,8 +56,6 @@ func (h *Handler) GetAdById(c *gin.Context) {
 		return
 	}
 
-	//fmt.Println(fmt.Sprintf("ASDDAS: %v", data.Animal.Breed))
-
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"data": data,
 	})

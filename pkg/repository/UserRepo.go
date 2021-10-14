@@ -42,6 +42,22 @@ func (database *UserRepo) Delete(id int) (models.User, error) {
 	return data, nil
 }
 
+func (database *UserRepo) UpdateRating(id int, data models.User) (float32, error) {
+	user := models.User{
+		Rating: data.Rating,
+	}
+
+	database.db.Model(&user).Where("id = ?", id).Updates(&user).Find(&user)
+
+	if user.Id == 0 {
+		return 0, nil
+	}
+
+	database.db.Save(&user)
+
+	return user.Rating, nil
+}
+
 func (database *UserRepo) Update(id int, data models.User) (models.User, error) {
 	user := models.User{
 		Name:     data.Name,

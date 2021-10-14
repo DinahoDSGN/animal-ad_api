@@ -91,6 +91,35 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 	})
 }
 
+func (h *Handler) UpdateRating(c *gin.Context) {
+	JSONinput := models.User{}
+
+	if err := c.BindJSON(&JSONinput); err != nil {
+		return
+	}
+
+	paramId, _ := strconv.Atoi(c.Param("id"))
+	if paramId <= 0 {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
+	}
+
+	rating, err := h.services.User.UpdateRating(paramId, JSONinput)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if rating == 0 {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]float32{
+		"data": rating,
+	})
+}
+
 // DeleteUser @Router /api/user/:id [DELETE]
 func (h *Handler) DeleteUser(c *gin.Context) {
 	paramId, _ := strconv.Atoi(c.Param("id"))

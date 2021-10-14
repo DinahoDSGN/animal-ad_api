@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -28,7 +27,6 @@ func (s *Animal) BeforeCreate(tx *gorm.DB) (err error) {
 		s.Type = animal.Breed.Type
 
 		profit := s.Price - animal.Breed.GlobalPrice
-		fmt.Println(profit)
 		if profit > 0 {
 			s.Profit = -profit
 			return

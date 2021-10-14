@@ -82,7 +82,7 @@ func (b *Bot) getMyAds() (string, error) {
 	for i := 0; i < len(ad); i++ {
 		messageTemplate = messageTemplate + fmt.Sprintf(
 			"*ID:* _%v_\n"+
-				"*Location:* _%v_\n"+
+				"*AdLocation:* _%v_\n"+
 				"*Animal Name:* _%v_\n"+
 				"*Animal Type:* _%v_\n"+
 				"*Animal Breed:* _%v_\n"+
@@ -120,7 +120,7 @@ func (b *Bot) adGetAd(id string) (string, error) {
 	msgTemplate := fmt.Sprintf(
 		"ID: %v\n"+
 			"Username %v\n"+
-			"Location: %v\n"+
+			"AdLocation: %v\n"+
 			"Animal Name: %v\n"+
 			"Animal Type: %v\n"+
 			"Animal Breed: %v\n"+
@@ -159,7 +159,7 @@ func (b *Bot) adGetAll() (string, error) {
 	for i := 0; i < len(ad); i++ {
 		messageTemplate = messageTemplate + fmt.Sprintf(
 			"*ID:* _%v_\n"+
-				"*Location:* _%v_\n"+
+				"*AdLocation:* _%v_\n"+
 				"*Animal Name:* _%v_\n"+
 				"*Animal Type:* _%v_\n"+
 				"*Animal Breed:* _%v_\n"+
