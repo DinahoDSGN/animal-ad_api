@@ -16,13 +16,13 @@ func NewHandler(services *services.Service) *Handler {
 func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 	router := r
 
-	auth := router.Group("/auth")
+	auth := router.Group("/auth", h.CORSMiddleware())
 	{
 		auth.POST("/signup", h.SignUp)
 		auth.POST("/signin", h.SignIn)
 	}
 
-	api := router.Group("/api")
+	api := router.Group("/api", h.CORSMiddleware())
 	{
 		user := api.Group("/user")
 		{
@@ -35,11 +35,10 @@ func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 		ad := api.Group("/adv")
 		{
 			ad.POST("/create", h.CreateAd)
-			ad.GET("/", h.GetAllAds)
+			ad.GET("/all", h.GetAllAds)
 			ad.GET("/:id", h.GetAdById)
 			ad.DELETE("/:id", h.DeleteAd)
 			ad.PUT("/:id", h.UpdateAd)
-			//sort section
 			ad.GET("/sort", h.SortAdBy)
 		}
 		spec := api.Group("/animal")

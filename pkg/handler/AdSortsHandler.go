@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SortAdBy @Router /api/adv/sort [get]
 func (h *Handler) SortAdBy(c *gin.Context) {
 	specify := c.Query("specify")
 	breed := c.Query("breed")
@@ -44,7 +45,6 @@ func (h *Handler) SortAdBy(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"values": values,
-		"data":   data,
+		"data": data,
 	})
 }
