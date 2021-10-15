@@ -22,7 +22,8 @@ func (h *Handler) InitRoutes(r *gin.Engine) *gin.Engine {
 		auth.POST("/signin", h.SignIn)
 	}
 
-	api := router.Group("/api", h.CORSMiddleware())
+	api := router.Group("/api")
+	api.Use(h.CORSMiddleware())
 	{
 		user := api.Group("/user")
 		{
